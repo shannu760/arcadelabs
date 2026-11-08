@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory Match — Pixel Pals Arcade</title>
+<meta name="description" content="A two-player pixel memory match game. Take turns, match pairs, keep the turn.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2307061a'/%3E%3Crect x='1' y='3' width='6' height='3' fill='%23ff3f8e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/pixel.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="./index.html">
+      <span class="brand-slot" aria-hidden="true"></span>
+      <span class="brand-name">PIXEL<b>PALS</b> ARCADE</span>
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="./index.html">ARCADE</a>
+      <a href="./memory.html" aria-current="page">MEMORY</a>
+      <a href="./race.html">TURBO DASH</a>
+      <a href="./chess.html">CHESS</a>
+
+      <a href="./labs.html">LABS</a>
+    </nav>
+  </div>
+</header>
+
+<main class="game-shell">
+  <div class="game-head">
+    <div class="game-title">
+      <h1>Memory Match</h1>
+      <small id="modeLabel">SOLO · 8 PAIRS</small>
+    </div>
+    <div class="row">
+      <button class="btn ghost sm" id="soundBtn" type="button" aria-pressed="true">SFX ON</button>
+      <button class="btn sm" id="restartBtn" type="button">New game</button>
+    </div>
+  </div>
+
+  <div class="panel flat" style="width:min(760px,100%)">
+    <div class="row" style="gap:14px">
+      <span class="pixel" style="font-size:9px;color:var(--muted)">PLAYERS</span>
+      <button class="btn ghost sm is-active" type="button" data-mode="solo" aria-pressed="true">1 Player</button>
+      <button class="btn ghost sm" type="button" data-mode="versus" aria-pressed="false">2 Players</button>
+      <span class="spacer"></span>
+      <span class="pixel" style="font-size:9px;color:var(--muted)">GRID</span>
+      <button class="btn ghost sm" type="button" data-grid="easy" aria-pressed="false">4×3</button>
+      <button class="btn ghost sm is-active" type="button" data-grid="normal" aria-pressed="true">4×4</button>
+      <button class="btn ghost sm" type="button" data-grid="hard" aria-pressed="false">6×4</button>
+    </div>
+  </div>
+
+  <div class="hud" id="hud">
+    <div class="hud-panel" id="hud1">
+      <div class="hud-top">
+        <span class="hud-name"><i class="pip lime"></i><span id="hud1Name">PLAYER 1</span></span>
+        <span class="hud-val" id="hud1Val">0</span>
+      </div>
+      <div class="bar"><i id="hud1Bar"></i></div>
+      <div class="hud-sub"><span>PAIRS</span><span id="hud1Right">0 / 8</span></div>
+    </div>
+
+    <div class="hud-panel" id="hud2">
+      <div class="hud-top">
+        <span class="hud-name"><i class="pip pink"></i><span id="hud2Name">PLAYER 2</span></span>
+        <span class="hud-val" id="hud2Val">0</span>
+      </div>
+      <div class="bar pink"><i id="hud2Bar"></i></div>
+      <div class="hud-sub"><span>PAIRS</span><span id="hud2Right">0 / 8</span></div>
+    </div>
+  </div>
+
+  <div class="hud one" id="statsHud">
+    <div class="hud-panel">
+      <div class="hud-top">
+        <span class="hud-name"><i class="pip lime"></i>TIME</span>
+        <span class="hud-val" id="statTime">0:00</span>
+      </div>
+      <div class="hud-sub"><span>MOVES <b id="statMoves" style="color:var(--text)">0</b></span><span>BEST <b id="statBest" style="color:var(--neon)">—</b></span></div>
+    </div>
+  </div>
+
+  <div class="board-wrap">
+    <div class="board" id="board" style="--cols:4" aria-label="Memory board"></div>
+
+    <div class="overlay" id="winOverlay" hidden>
+      <div class="overlay-card">
+        <h2 id="winTitle">Board cleared</h2>
+        <div id="winBody" class="center" style="display:flex;flex-direction:column;gap:10px"></div>
+        <div class="overlay-actions">
+          <button class="btn sm" id="againBtn" type="button">Play again</button>
+          <a class="btn ghost sm" href="./race.html">Try Turbo Dash</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="muted center" style="max-width:52ch;margin:0">
+    Tip: in 2-player mode a match keeps your turn. Two misses in a row is how friendships end.
+  </p>
+</main>
+
+<footer class="wrap footer">
+  <span>Best time is saved in this browser.</span>
+  <span><b>MEMORY MATCH</b> · 12 symbols</span>
+</footer>
+
+<script type="module" src="./assets/js/memory.js"></script>
+</body>
+</html>

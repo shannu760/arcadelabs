@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Typing Ninja — Arcade Labs</title>
+<meta name="description" content="30, 60 or 120 seconds of typing. WPM counts only when accuracy holds.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2307061a'/%3E%3Crect x='2' y='3' width='4' height='2' fill='%23b6ff3d'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/pixel.css">
+<link rel="stylesheet" href="../assets/css/labs.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-slot" aria-hidden="true"></span>
+      <span class="brand-name">PIXEL<b>PALS</b> ARCADE</span>
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="../index.html">ARCADE</a>
+      <a href="../memory.html">MEMORY</a>
+      <a href="../race.html">TURBO DASH</a>
+      <a href="../chess.html">CHESS</a>
+      <a href="../labs.html" aria-current="page">LABS</a>
+    </nav>
+  </div>
+</header>
+
+<main class="game-shell">
+  <div class="game-head">
+    <div class="game-title">
+      <h1>Typing Ninja</h1>
+      <small>SPEED MEANS NOTHING WITHOUT ACCURACY</small>
+    </div>
+    <div class="row">
+      <button class="btn ghost sm" id="restartBtn" type="button">Restart</button>
+    </div>
+  </div>
+
+  <div data-arcade-header></div>
+
+  <section class="labs-setup" id="setup" aria-label="Typing setup">
+    <div>
+      <h2>DURATION</h2>
+      <div class="labs-chiprow" id="durationChips"></div>
+    </div>
+    <div>
+      <h2>TEXT</h2>
+      <div class="labs-chiprow" id="textChips"></div>
+    </div>
+    <p class="labs-note">No backspace: every keystroke counts, so accuracy is honest.</p>
+    <div class="row"><button class="btn" id="startBtn" type="button">Start typing</button></div>
+  </section>
+
+  <section class="ty-shell" id="game" hidden>
+    <div class="ty-stats">
+      <div class="ty-stat"><b id="timeVal">30</b><span>SECONDS</span></div>
+      <div class="ty-stat"><b id="wpmVal">0</b><span>WPM</span></div>
+      <div class="ty-stat"><b id="accVal">100%</b><span>ACCURACY</span></div>
+      <div class="ty-stat"><b id="typedVal">0</b><span>CHARS</span></div>
+    </div>
+    <div class="ty-text" id="text" tabindex="0" aria-label="Text to type"></div>
+    <p class="labs-note center" id="hint">Start typing — the timer begins on your first keystroke.</p>
+    <input class="ty-input" id="capture" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-hidden="true">
+  </section>
+
+  <div class="overlay" id="overlay" hidden>
+    <div id="resultHost"></div>
+  </div>
+</main>
+
+<footer class="wrap footer">
+  <span>Below 90% accuracy earns no K-Points.</span>
+  <span><b>TYPING NINJA</b> · Arcade Labs</span>
+</footer>
+
+<script type="module" src="../assets/js/arcade/games/typing-ninja.js"></script>
+</body>
+</html>

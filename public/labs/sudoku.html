@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sudoku Master — Arcade Labs</title>
+<meta name="description" content="Generated Sudoku puzzles with exactly one solution. Easy, medium or hard.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2307061a'/%3E%3Crect x='2' y='2' width='4' height='4' fill='%233ee8ff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/pixel.css">
+<link rel="stylesheet" href="../assets/css/labs.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-slot" aria-hidden="true"></span>
+      <span class="brand-name">PIXEL<b>PALS</b> ARCADE</span>
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="../index.html">ARCADE</a>
+      <a href="../memory.html">MEMORY</a>
+      <a href="../race.html">TURBO DASH</a>
+      <a href="../chess.html">CHESS</a>
+      <a href="../labs.html" aria-current="page">LABS</a>
+    </nav>
+  </div>
+</header>
+
+<main class="game-shell">
+  <div class="game-head">
+    <div class="game-title">
+      <h1>Sudoku Master</h1>
+      <small>ONE SOLUTION ONLY · HINTS COST SCORE</small>
+    </div>
+    <div class="row">
+      <button class="btn ghost sm" id="newBtn" type="button">New puzzle</button>
+    </div>
+  </div>
+
+  <div data-arcade-header></div>
+
+  <div class="labs-chiprow" id="diffChips" style="justify-content:center;margin-top:12px"></div>
+
+  <div class="sku-wrap">
+    <div class="sku-stats">
+      <span>TIME <b id="timeVal">0:00</b></span>
+      <span>HINTS <b id="hintVal">0</b></span>
+      <span>FILLED <b id="fillVal">0/81</b></span>
+    </div>
+    <div class="sku-grid" id="grid" role="grid" aria-label="Sudoku grid"></div>
+    <div class="sku-pad" id="pad"></div>
+    <p class="labs-note center" id="message" style="min-height:20px">&nbsp;</p>
+  </div>
+
+  <div class="overlay" id="overlay" hidden>
+    <div id="resultHost"></div>
+  </div>
+</main>
+
+<footer class="wrap footer">
+  <span>Every puzzle is generated locally and verified to have a single solution.</span>
+  <span><b>SUDOKU</b> · Arcade Labs</span>
+</footer>
+
+<script type="module" src="../assets/js/arcade/games/sudoku.js"></script>
+</body>
+</html>

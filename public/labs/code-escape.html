@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Code Escape — Arcade Labs</title>
+<meta name="description" content="Five levels of Python, C and Java challenges: predict output, find the bug, fill the blank.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2307061a'/%3E%3Crect x='2' y='2' width='4' height='4' fill='%23b6ff3d'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/pixel.css">
+<link rel="stylesheet" href="../assets/css/labs.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-slot" aria-hidden="true"></span>
+      <span class="brand-name">PIXEL<b>PALS</b> ARCADE</span>
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="../index.html">ARCADE</a>
+      <a href="../memory.html">MEMORY</a>
+      <a href="../race.html">TURBO DASH</a>
+      <a href="../chess.html">CHESS</a>
+      <a href="../labs.html" aria-current="page">LABS</a>
+    </nav>
+  </div>
+</header>
+
+<main class="game-shell">
+  <div class="game-head">
+    <div class="game-title">
+      <h1>Code Escape</h1>
+      <small>PYTHON · C · JAVA · 40 CHALLENGES · 5 LEVELS</small>
+    </div>
+    <div class="row">
+      <a class="btn ghost sm" href="../labs.html">Back to Labs</a>
+    </div>
+  </div>
+
+  <div data-arcade-header></div>
+
+  <section class="labs-setup code-setup" id="setup" aria-label="Code Escape ladder">
+    <div>
+      <h2>LEVEL LADDER</h2>
+      <div class="code-ladder" id="levels"></div>
+    </div>
+    <div>
+      <h2>LANGUAGE</h2>
+      <div class="labs-chiprow" id="langChips"></div>
+    </div>
+    <p class="labs-note" id="poolNote"></p>
+    <p class="labs-note code-banknote" id="bankNote"></p>
+    <div class="row">
+      <button class="btn" id="startBtn" type="button">Start run</button>
+    </div>
+  </section>
+
+  <section class="code-shell" id="run" hidden aria-live="polite">
+    <div class="quiz-top">
+      <span id="progress">1 / 8</span>
+      <span id="runTag">LEVEL 1</span>
+      <span id="solvedCount">0 SOLVED</span>
+    </div>
+
+    <div class="code-pane">
+      <div class="code-head">
+        <span class="code-lang" id="langTag">PYTHON</span>
+        <span class="code-src" id="kindTag">ORIGINAL</span>
+      </div>
+      <h2 class="code-title" id="challengeTitle">…</h2>
+      <pre class="code-block" id="codeBlock"></pre>
+    </div>
+
+    <p class="code-prompt" id="prompt">…</p>
+    <div class="quiz-options" id="options"></div>
+    <p class="quiz-feedback" id="feedback">&nbsp;</p>
+    <div class="row" style="justify-content:flex-end">
+      <button class="btn ghost sm" id="quitBtn" type="button">Quit</button>
+      <button class="btn sm" id="nextBtn" type="button" disabled>Next</button>
+    </div>
+  </section>
+
+  <div class="overlay" id="overlay" hidden>
+    <div id="resultHost"></div>
+  </div>
+</main>
+
+<footer class="wrap footer">
+  <span>Five solves in a level open the next one. Questions load from the arcade database when it is configured.</span>
+  <span><b>CODE ESCAPE</b> · Arcade Labs</span>
+</footer>
+
+<script type="module" src="../assets/js/arcade/games/code-escape.js"></script>
+</body>
+</html>

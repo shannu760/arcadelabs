@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2048 Challenge — Arcade Labs</title>
+<meta name="description" content="Slide and merge tiles to 2048. Arrow keys, WASD or swipe.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2307061a'/%3E%3Crect x='2' y='2' width='4' height='4' fill='%23ffcf3d'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/pixel.css">
+<link rel="stylesheet" href="../assets/css/labs.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-slot" aria-hidden="true"></span>
+      <span class="brand-name">PIXEL<b>PALS</b> ARCADE</span>
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="../index.html">ARCADE</a>
+      <a href="../memory.html">MEMORY</a>
+      <a href="../race.html">TURBO DASH</a>
+      <a href="../chess.html">CHESS</a>
+      <a href="../labs.html" aria-current="page">LABS</a>
+    </nav>
+  </div>
+</header>
+
+<main class="game-shell">
+  <div class="game-head">
+    <div class="game-title">
+      <h1>2048 Challenge</h1>
+      <small>MERGE · 4×4 · ONE TILE AT A TIME</small>
+    </div>
+    <div class="row">
+      <button class="btn ghost sm" id="undoBtn" type="button">Undo</button>
+      <button class="btn sm" id="newBtn" type="button">New game</button>
+    </div>
+  </div>
+
+  <div data-arcade-header></div>
+
+  <div class="hud" id="hud">
+    <div class="hud-panel">
+      <div class="hud-top">
+        <span class="hud-name"><i class="pip lime"></i>SCORE</span>
+        <span class="hud-val" id="scoreVal">0</span>
+      </div>
+      <div class="hud-sub"><span>MERGES</span><span id="mergeVal">0</span></div>
+    </div>
+    <div class="hud-panel">
+      <div class="hud-top">
+        <span class="hud-name"><i class="pip pink"></i>BEST</span>
+        <span class="hud-val" id="bestVal">0</span>
+      </div>
+      <div class="hud-sub"><span>HIGHEST TILE</span><span id="highVal">2</span></div>
+    </div>
+  </div>
+
+  <div class="g2048" id="board" role="grid" aria-label="2048 board"></div>
+
+  <p class="muted center" style="max-width:52ch;margin:0">
+    Arrow keys, WASD or swipe. Tiles merge once per move. Reach 2048 to win —
+    then keep going for score.
+  </p>
+
+  <div class="overlay" id="overlay" hidden>
+    <div id="resultHost"></div>
+  </div>
+</main>
+
+<footer class="wrap footer">
+  <span>Scores are verified against the tile rules before XP is awarded.</span>
+  <span><b>2048</b> · Arcade Labs</span>
+</footer>
+
+<script type="module" src="../assets/js/arcade/games/g2048.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chess — Pixel Pals Arcade</title>
+<meta name="description" content="Two-player pixel chess plus a single-player ladder from Pawn to Grandmaster.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2307061a'/%3E%3Crect x='1' y='3' width='6' height='3' fill='%23ff3f8e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/pixel.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="./index.html">
+      <span class="brand-slot" aria-hidden="true"></span>
+      <span class="brand-name">PIXEL<b>PALS</b> ARCADE</span>
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="./index.html">ARCADE</a>
+      <a href="./memory.html">MEMORY</a>
+      <a href="./race.html">TURBO DASH</a>
+      <a href="./chess.html" aria-current="page">CHESS</a>
+      <a href="./labs.html">LABS</a>
+    </nav>
+  </div>
+</header>
+
+<main class="game-shell">
+  <div class="game-head">
+    <div class="game-title">
+      <h1>Chess</h1>
+      <small>Checkmate your opponent</small>
+    </div>
+    <div class="row">
+      <button class="btn ghost sm" id="soundBtn" type="button" aria-pressed="true">SFX ON</button>
+      <button class="btn sm" id="restartBtn" type="button">New game</button>
+    </div>
+  </div>
+
+  <div class="panel flat chess-panel">
+    <div class="row chess-opt">
+      <span class="pixel opt-label">MODE</span>
+      <button class="btn sm is-active" type="button" data-mode="2p" aria-pressed="true">2 PLAYERS</button>
+      <button class="btn ghost sm" type="button" data-mode="1p" aria-pressed="false">1 PLAYER</button>
+    </div>
+
+    <div class="row chess-opt" id="sideRow" hidden>
+      <span class="pixel opt-label">YOUR SIDE</span>
+      <button class="btn ghost sm is-active" type="button" data-side="w" aria-pressed="true">WHITE</button>
+      <button class="btn ghost sm" type="button" data-side="b" aria-pressed="false">BLACK</button>
+    </div>
+
+    <div class="chess-levels" id="levelRow" hidden>
+      <span class="pixel opt-label">LEVEL</span>
+      <div class="level-ladder" id="levelLadder" role="group" aria-label="AI level"></div>
+    </div>
+  </div>
+
+  <div class="hud chess-hud">
+    <div class="hud-panel" id="hudWhite">
+      <div class="hud-top">
+        <span class="hud-name">WHITE</span>
+        <span class="hud-val" id="hudWhiteVal">0</span>
+      </div>
+      <div class="bar"><i id="hudWhiteBar"></i></div>
+      <div class="hud-sub"><span>MATCHES</span><span id="hudWhiteGames">0</span></div>
+    </div>
+
+    <div class="hud-panel" id="hudBlack">
+      <div class="hud-top">
+        <span class="hud-name">BLACK</span>
+        <span class="hud-val" id="hudBlackVal">0</span>
+      </div>
+      <div class="bar pink"><i id="hudBlackBar"></i></div>
+      <div class="hud-sub"><span>MATCHES</span><span id="hudBlackGames">0</span></div>
+    </div>
+  </div>
+
+  <div class="board-wrap chess-wrap">
+    <div class="chess-board" id="board" role="grid" aria-label="Chess board"></div>
+  </div>
+
+  <div class="chess-status" id="statusBar" aria-live="polite">WHITE TO MOVE</div>
+
+  <div class="overlay" id="winOverlay" hidden>
+    <div class="overlay-card">
+      <h2 id="winTitle"></h2>
+      <div id="winBody" class="center" style="margin:16px 0"></div>
+      <div class="overlay-actions">
+        <button class="btn sm" id="againBtn" type="button">Play again</button>
+        <a class="btn ghost sm" href="./index.html">Back to hub</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="wrap footer">
+  <span>Matches and the level you beat are saved in this browser.</span>
+  <span><b>CHESS</b> · 8×8 board</span>
+</footer>
+
+<script type="module" src="./assets/js/chess.js"></script>
+</body>
+</html>
