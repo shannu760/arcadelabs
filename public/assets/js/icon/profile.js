@@ -10,6 +10,7 @@
 */
 
 import { loadSession, ensureFresh } from './session.js';
+import { isLocalHost } from './api-status.js';
 
 const API = '/api';
 const HANDLE_RE = /^[a-z0-9_]{3,20}$/;
@@ -283,7 +284,14 @@ async function init() {
 
   const health = await api('/health', { auth: false }).catch(() => ({ status: 0, data: null }));
   if (health.status !== 200) {
-    showMissing('The API is not answering. Start the server with "npm run dev".', true);
+    // A static host has no API at all; only a developer's machine is missing a
+    // running server. Say which, and never hand a visitor a command to run.
+    showMissing(
+      isLocalHost()
+        ? 'The API is not answering on this machine, so player records cannot load. The page and the API are served by the same process, which needs to be running.'
+        : 'Player profiles are served by Student Icon\'s API, and this deployment publishes the static site only. Nothing is broken — the record simply is not reachable here. The arcade and the landing page still work.',
+      true
+    );
     return;
   }
 
