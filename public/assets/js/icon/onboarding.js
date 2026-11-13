@@ -21,6 +21,7 @@ import {
   captureUrlSession,
   signOutRequest,
 } from './session.js';
+import { isLocalHost } from './api-status.js';
 
 const API = '/api';
 const STORE_KEY = 'si.player.id';
@@ -121,7 +122,8 @@ function go(step) {
   panel?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
-function lock(message) {
+function lock(message, title) {
+  if (title) el('locked-title').textContent = title;
   document.querySelectorAll('[data-step]').forEach((panel) => {
     panel.hidden = true;
   });
@@ -625,7 +627,19 @@ async function init() {
   }
 
   if (!state.health?.ok) {
-    lock('The API is not answering. Start the server with "npm run dev" and reload this page.');
+    // A static host has no /api at all, so this is expected there — it is not a
+    // visitor's mistake and not something they can fix by running a command.
+    if (isLocalHost()) {
+      lock(
+        'The API is not answering on this machine, so accounts cannot load. The page and the API are served by the same process, which needs to be running.',
+        'The API is not running'
+      );
+    } else {
+      lock(
+        "Student Icon's accounts, profiles and XP are served by its own API. This deployment publishes the static site only, so creating a player cannot work here — nothing is broken and no account is affected. The arcade and the landing page still work.",
+        'Accounts are not connected here'
+      );
+    }
     return;
   }
 

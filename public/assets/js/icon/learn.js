@@ -10,6 +10,7 @@
 */
 
 import { loadSession, ensureFresh } from './session.js';
+import { isLocalHost } from './api-status.js';
 
 const API = '/api';
 const DEV_KEY = 'si.player.id';
@@ -265,6 +266,23 @@ function showError(message) {
 
 /* ----------------------------------------------------------------- boot */
 
+/* A static host has no /api to score answers; a local machine has a server that
+   is not running. Both are explained plainly instead of telling a visitor to
+   run a command. */
+function showOffline() {
+  const local = isLocalHost();
+
+  const body = document.querySelector('.si-learn-body');
+  if (body) body.hidden = true;
+
+  el('offline-title').textContent = local
+    ? 'Challenges cannot reach their API.'
+    : 'Challenges are not connected here.';
+  el('offline-local').hidden = !local;
+  el('offline-remote').hidden = local;
+  el('api-offline').hidden = false;
+}
+
 async function init() {
   el('ch-form').addEventListener('submit', submit);
   el('ch-close').addEventListener('click', closePanel);
@@ -280,8 +298,7 @@ async function init() {
 
   const { status, data } = await api('/challenges');
   if (status !== 200 || !Array.isArray(data?.challenges)) {
-    el('list-note').textContent =
-      'The challenge list could not be loaded. Start the server with "npm run dev" and reload.';
+    showOffline();
     return;
   }
 

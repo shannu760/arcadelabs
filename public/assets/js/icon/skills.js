@@ -7,6 +7,7 @@
 */
 
 import { loadSession, ensureFresh } from './session.js';
+import { isLocalHost } from './api-status.js';
 
 const API = '/api';
 const DEV_KEY = 'si.player.id';
@@ -131,6 +132,26 @@ function renderTree() {
   host.hidden = false;
 }
 
+/* No API means two very different situations, and neither is the visitor's
+   fault: a static host that has no /api at all, or a local server that is not
+   running. Say which one it is instead of printing a command at a stranger. */
+function showOffline() {
+  const local = isLocalHost();
+
+  const note = el('skills-note');
+  if (note) note.hidden = true;
+
+  const summary = document.querySelector('.si-skill-summary');
+  if (summary) summary.hidden = true;
+
+  el('offline-title').textContent = local
+    ? 'The skill tree cannot reach its API.'
+    : 'The skill tree is not connected here.';
+  el('offline-local').hidden = !local;
+  el('offline-remote').hidden = local;
+  el('api-offline').hidden = false;
+}
+
 async function init() {
   const health = await api('/health', { auth: false }).catch(() => ({ status: 0, data: null }));
 
@@ -143,8 +164,7 @@ async function init() {
 
   const { status, data } = await api('/skills');
   if (status !== 200 || !Array.isArray(data?.branches)) {
-    el('skills-note').textContent =
-      'The skill tree could not be loaded. Start the server with "npm run dev" and reload.';
+    showOffline();
     return;
   }
 

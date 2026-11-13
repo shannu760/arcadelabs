@@ -41,6 +41,29 @@
     </p>
   </div>
 
+  <section class="si-offline" id="api-offline" hidden>
+    <span class="eyebrow">NOT CONNECTED</span>
+    <h2 id="offline-title">Challenges are not connected here.</h2>
+    <p id="offline-remote">
+      Every challenge is scored by Student Icon's own API — the browser sends answers and the server
+      decides what they are worth. This deployment publishes the static site only, so there is no
+      scorer to talk to. Nothing is broken and no XP has been lost.
+    </p>
+    <p id="offline-local" hidden>
+      The API is not answering on this machine, so the challenge list cannot load. The page is served
+      from the same origin as the API, which needs to be running.
+    </p>
+    <ul class="si-offline-what">
+      <li>The arcade — eleven games, no account, no API — is fully playable.</li>
+      <li>The landing page and the player profile pages are static and still load.</li>
+      <li>Challenges, XP and skill levels are part of the full build, which needs the API running.</li>
+    </ul>
+    <div class="hero-actions">
+      <a class="btn" href="./arcade/index.html">Play the arcade</a>
+      <a class="btn ghost" href="./index.html">Back to Student Icon</a>
+    </div>
+  </section>
+
   <div class="si-learn-body">
 
     <section class="si-learn-list" id="list" aria-label="Challenges">

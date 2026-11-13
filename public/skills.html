@@ -41,6 +41,29 @@
     </p>
   </div>
 
+  <section class="si-offline" id="api-offline" hidden>
+    <span class="eyebrow">NOT CONNECTED</span>
+    <h2 id="offline-title">The skill tree is not connected here.</h2>
+    <p id="offline-remote">
+      Skill levels come from Student Icon's own API — the same service that records profiles and XP.
+      This deployment publishes the static site only, so there is nothing for the tree to read from.
+      It is not broken; it is simply not wired up here, and no player's data is affected.
+    </p>
+    <p id="offline-local" hidden>
+      The API is not answering on this machine. The tree loads from the same origin as this page, so
+      the server needs to be running before it can appear.
+    </p>
+    <ul class="si-offline-what">
+      <li>The arcade — eleven games, no account, no API — is fully playable.</li>
+      <li>The landing page and the player profile pages are static and still load.</li>
+      <li>Accounts, XP and this tree are part of the full build, which needs the API running.</li>
+    </ul>
+    <div class="hero-actions">
+      <a class="btn" href="./arcade/index.html">Play the arcade</a>
+      <a class="btn ghost" href="./index.html">Back to Student Icon</a>
+    </div>
+  </section>
+
   <div class="si-skill-summary">
     <div class="si-stat"><span class="si-stat-label">LEVELS</span><b id="stat-levels">—</b></div>
     <div class="si-stat"><span class="si-stat-label">SKILLS STARTED</span><b id="stat-started">—</b></div>
