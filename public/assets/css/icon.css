@@ -1,0 +1,364 @@
+/* ============================================================
+   STUDENT ICON — landing layer
+   Extends the shared pixel theme (pixel.css). No new fonts,
+   no new colour language: same tokens, denser layout.
+   ============================================================ */
+
+.wrap.wide { max-width: 1080px; }
+
+/* ---------------- hero ---------------- */
+
+.si-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 30px;
+  align-items: center;
+  padding: 40px 30px 30px;
+}
+
+.si-hero-copy { min-width: 0; }
+
+.si-hero h1 { margin-bottom: 16px; }
+
+.si-hero .neon { color: var(--neon); text-shadow: 0 0 18px rgba(200, 255, 61, 0.35); }
+
+.si-art {
+  position: relative;
+  border: 4px solid var(--line-2);
+  background: var(--ink);
+  box-shadow: 8px 8px 0 #000;
+  overflow: hidden;
+}
+
+.si-art svg { display: block; width: 100%; height: auto; }
+
+.si-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.28) 0 2px, transparent 2px 4px);
+}
+
+.si-art-cap {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-top: 3px solid var(--line);
+  background: var(--ink-2);
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+}
+
+.si-art-blink { color: var(--neon); animation: si-blink 1.6s steps(2, start) infinite; }
+
+@keyframes si-blink { 50% { opacity: 0.25; } }
+
+/* ---------------- shared section rhythm ---------------- */
+
+main > section { margin-top: 46px; }
+
+.si-note {
+  margin: 14px 0 0;
+  padding-left: 12px;
+  border-left: 3px solid var(--line-2);
+  color: var(--muted);
+  font-size: 17px;
+  max-width: 72ch;
+}
+
+/* ---------------- universe cards ---------------- */
+
+.si-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.si-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 20px 16px;
+  background: var(--panel);
+  border: 3px solid var(--line);
+  box-shadow: 6px 6px 0 #000;
+}
+
+.si-card-student { border-top: 6px solid var(--cyan); }
+.si-card-startup { border-top: 6px solid var(--neon); }
+
+.si-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.si-card-no {
+  font-family: "Press Start 2P", monospace;
+  font-size: 18px;
+  color: var(--line-2);
+}
+
+.si-card h3 { font-size: 13px; margin: 2px 0 0; }
+
+.si-card p { color: var(--muted); font-size: 17px; margin: 0; }
+
+.si-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+.si-list li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--text);
+}
+
+.si-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  background: var(--neon);
+  box-shadow: 0 0 8px rgba(200, 255, 61, 0.6);
+}
+
+.si-card-startup .si-list li::before { background: var(--gold); box-shadow: 0 0 8px rgba(255, 207, 61, 0.6); }
+
+.si-foot {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 2px dashed var(--line);
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* ---------------- bridge flows ---------------- */
+
+.si-bridge {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.si-flow {
+  display: grid;
+  grid-template-columns: minmax(0, auto) 20px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  background: var(--ink-2);
+  border: 3px solid var(--line);
+  font-size: 17px;
+}
+
+.si-flow-from {
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  letter-spacing: 0.06em;
+  color: var(--cyan);
+  line-height: 1.7;
+}
+
+.si-flow-arrow { color: var(--pink); font-size: 20px; text-align: center; }
+
+.si-flow-to { color: var(--muted); }
+
+/* ---------------- ICON AI ---------------- */
+
+.si-personas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.si-chip {
+  padding: 8px 11px;
+  background: rgba(160, 107, 255, 0.12);
+  border: 2px solid rgba(160, 107, 255, 0.45);
+  color: #d9c9ff;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+
+.si-routes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.si-route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  background: var(--panel);
+  border: 3px solid var(--line);
+  font-size: 17px;
+}
+
+.si-route-task { color: var(--text); }
+
+.si-route-badge {
+  flex: none;
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  padding: 6px 8px;
+  border: 2px solid;
+}
+
+.si-route-badge.local { color: var(--neon); border-color: rgba(200,255,61,0.5); background: rgba(200,255,61,0.08); }
+.si-route-badge.cloud { color: var(--cyan); border-color: rgba(56,242,255,0.5); background: rgba(56,242,255,0.08); }
+.si-route-badge.math { color: var(--gold); border-color: rgba(255,207,61,0.5); background: rgba(255,207,61,0.08); }
+
+/* ---------------- milestones ---------------- */
+
+.si-target {
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(12px, 2.2vw, 16px);
+  color: var(--gold);
+  margin: 4px 0 0;
+  word-break: break-word;
+}
+
+.si-sub { color: var(--muted); font-size: 16px; margin: 0; }
+
+.si-meter {
+  position: relative;
+  height: 20px;
+  margin-top: 6px;
+  background:
+    repeating-linear-gradient(90deg, var(--line) 0 8px, transparent 8px 11px),
+    var(--ink);
+  border: 2px solid var(--line-2);
+}
+
+.si-meter.gold { border-color: rgba(255, 207, 61, 0.6); }
+
+.si-meter-fill {
+  display: block;
+  height: 100%;
+  background: var(--neon);
+}
+
+.si-meter.gold .si-meter-fill { background: var(--gold); }
+
+.si-milestones .si-foot { font-size: 7px; }
+
+/* ---------------- status board ---------------- */
+
+.si-status {
+  border: 3px solid var(--line);
+  background: var(--panel);
+  box-shadow: 6px 6px 0 #000;
+}
+
+.si-status-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 108px 104px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--line);
+  font-size: 17px;
+}
+
+.si-status-row:last-child { border-bottom: 0; }
+
+.si-status-row > a {
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  letter-spacing: 0.06em;
+  text-align: right;
+}
+
+.si-cell-muted { color: var(--line-2); text-align: right; font-size: 15px; }
+
+.si-badge {
+  display: inline-block;
+  font-family: "Press Start 2P", monospace;
+  font-size: 7px;
+  letter-spacing: 0.06em;
+  padding: 6px 7px;
+  border: 2px solid;
+}
+
+.si-badge.live { color: var(--ink); background: var(--neon); border-color: #000; }
+.si-badge.done { color: var(--ink); background: var(--cyan); border-color: #000; }
+.si-badge.building { color: var(--gold); border-color: rgba(255,207,61,0.55); background: rgba(255,207,61,0.08); }
+.si-badge.next { color: var(--cyan); border-color: rgba(56,242,255,0.5); background: rgba(56,242,255,0.08); }
+.si-badge.planned { color: var(--muted); border-color: var(--line); background: transparent; }
+.si-badge.stage2 { color: #d9c9ff; border-color: rgba(160,107,255,0.5); background: rgba(160,107,255,0.1); }
+
+/* ---------------- closing ---------------- */
+
+.si-cta {
+  padding: 30px 26px;
+  background:
+    linear-gradient(180deg, rgba(200, 255, 61, 0.07), transparent 70%),
+    var(--panel);
+  border: 4px solid var(--line-2);
+  box-shadow: 8px 8px 0 #000;
+  text-align: center;
+}
+
+.si-cta h2 { font-size: clamp(13px, 2.6vw, 18px); margin-bottom: 12px; }
+
+.si-cta p { color: var(--muted); font-size: 17px; margin: 0 auto 20px; max-width: 54ch; }
+
+.si-cta .hero-actions { justify-content: center; margin-bottom: 0; }
+
+/* ---------------- entrance (CSS only — never hides content) ---------------- */
+
+@keyframes si-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.si-hero-copy, .si-art { animation: si-enter 240ms steps(5, end) both; }
+
+/* ---------------- responsive ---------------- */
+
+@media (max-width: 860px) {
+  .si-hero { grid-template-columns: minmax(0, 1fr); padding: 30px 20px 22px; }
+  .si-art { max-width: 460px; }
+  .si-split, .si-bridge { grid-template-columns: minmax(0, 1fr); }
+  .si-status-row { grid-template-columns: minmax(0, 1fr) 96px; }
+  .si-status-row .si-cell-muted { display: none; }
+}
+
+@media (max-width: 520px) {
+  main > section { margin-top: 36px; }
+  .si-flow { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .si-flow-arrow { display: none; }
+  .si-route { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .si-status-row { grid-template-columns: minmax(0, 1fr) 82px; padding: 10px 12px; font-size: 16px; }
+  .si-badge { font-size: 6px; padding: 5px 6px; }
+  .si-target { font-size: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .si-hero-copy, .si-art { animation: none; }
+  .si-art-blink { animation: none; }
+  .marquee-track { animation: none; }
+  html { scroll-behavior: auto; }
+}

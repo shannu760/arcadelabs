@@ -1,0 +1,20 @@
+# secrets
+.env
+.env.local
+.dev.vars
+*.pem
+
+# logs / local state
+.devserver.log
+*.log
+
+# dependencies
+node_modules/
+.labtest/node_modules/
+
+# build output
+dist/
+.next/
+
+# local dev database
+.data/

@@ -3,236 +3,379 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pixel Pals Arcade — 2-player pixel games</title>
-<meta name="description" content="A tiny pixel arcade for two: Memory Match, Turbo Dash, Chess — plus Arcade Labs. Same keyboard, one couch, zero sign-ups.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2306050f'/%3E%3Crect x='1' y='3' width='6' height='3' fill='%23c8ff3d'/%3E%3C/svg%3E">
+<title>Student Icon — the student-to-entrepreneur universe</title>
+<meta name="description" content="Student Icon: a simulated universe where what you learn becomes the capital you build companies with. Student life, startup life, and one shared identity.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2306050f'/%3E%3Crect x='1' y='4' width='6' height='3' fill='%23c8ff3d'/%3E%3Crect x='2' y='2' width='4' height='2' fill='%2338f2ff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./assets/css/pixel.css">
+<link rel="stylesheet" href="./assets/css/icon.css">
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
 <header class="topbar">
-  <div class="wrap topbar-inner">
+  <div class="wrap wide topbar-inner">
     <a class="brand" href="./index.html">
       <span class="brand-slot" aria-hidden="true"></span>
-      <span class="brand-name">PIXEL<b>PALS</b> ARCADE</span>
+      <span class="brand-name">STUDENT<b>ICON</b></span>
     </a>
     <nav class="topnav" aria-label="Main">
-      <a href="./index.html" aria-current="page">ARCADE</a>
-      <a href="./memory.html">MEMORY</a>
-      <a href="./race.html">TURBO DASH</a>
-      <a href="./chess.html">CHESS</a>
-      <a href="./labs.html">LABS</a>
+      <a href="#universes">UNIVERSES</a>
+      <a href="#bridge">THE LINK</a>
+      <a href="#icon-ai">ICON AI</a>
+      <a href="#milestones">MILESTONES</a>
+      <a href="#status">STATUS</a>
+      <a href="./arcade/index.html">ARCADE</a>
     </nav>
   </div>
 </header>
 
-<main>
-  <section class="wrap hero" aria-labelledby="hero-title">
-    <span class="eyebrow">INSERT COIN · 2 PLAYERS · 1 KEYBOARD</span>
-    <h1 id="hero-title">One couch, one keyboard.<br>A whole <span class="lime">pixel</span> <span class="pink">arcade</span>.</h1>
-    <p class="lede">
-      Flip cards, dodge traffic, checkmate a friend. Three arcade classics built for
-      the same keyboard — no accounts, no lobbies, no waiting. Then head into
-      Arcade Labs for eleven more experiments.
-    </p>
-    <div class="hero-actions">
-      <a class="btn" href="./memory.html">Play Memory Match</a>
-      <a class="btn pink" href="./race.html">Play Turbo Dash</a>
-      <a class="btn ghost" href="./chess.html">Play Chess</a>
-      <a class="btn gold" href="./labs.html">Enter Arcade Labs</a>
+<main class="wrap wide">
+
+  <section class="hero si-hero" aria-labelledby="hero-title">
+    <div class="si-hero-copy">
+      <span class="eyebrow">STUDENT &rarr; ENTREPRENEUR &middot; ONE IDENTITY</span>
+      <h1 id="hero-title">Start in a classroom.<br>Finish as an <span class="neon">icon</span>.</h1>
+      <p class="lede">
+        Student Icon is a simulated universe where what you learn, the projects you ship and the
+        people you meet become the capital you build companies with. Student life and startup life
+        are two halves of the same save file.
+      </p>
+      <div class="hero-actions">
+        <a class="btn" href="./onboarding.html">Create your player</a>
+        <a class="btn ghost" href="./arcade/index.html">Play the arcade</a>
+      </div>
+      <div class="hero-meta">
+        <span><i class="dot"></i> F2 COMPLETE</span>
+        <span><i class="dot" style="background:var(--gold);box-shadow:0 0 10px var(--gold)"></i> F3 IN PROGRESS</span>
+        <span><i class="dot" style="background:var(--violet);box-shadow:0 0 10px var(--violet)"></i> ICON AI IN STAGE 2</span>
+      </div>
     </div>
-    <div class="hero-meta">
-      <span><i class="dot"></i> COUCH CO-OP</span>
-      <span><i class="dot" style="background:var(--pink);box-shadow:0 0 10px var(--pink)"></i> 2 PLAYER LOCAL</span>
-      <span><i class="dot" style="background:var(--cyan);box-shadow:0 0 10px var(--cyan)"></i> WORKS OFFLINE</span>
-      <span><i class="dot" style="background:var(--gold);box-shadow:0 0 10px var(--gold)"></i> PIXEL PERFECT</span>
+
+    <div class="si-art" aria-hidden="true">
+      <svg viewBox="0 0 260 168" shape-rendering="crispEdges" role="presentation">
+        <rect width="260" height="168" fill="#0b0824"/>
+        <g fill="#221d4d">
+          <rect x="0" y="20" width="260" height="1"/>
+          <rect x="0" y="52" width="260" height="1"/>
+          <rect x="0" y="84" width="260" height="1"/>
+          <rect x="0" y="116" width="260" height="1"/>
+        </g>
+        <!-- skyline: the student city -->
+        <g fill="#332a63">
+          <rect x="10" y="86" width="26" height="60"/>
+          <rect x="42" y="64" width="20" height="82"/>
+          <rect x="68" y="100" width="30" height="46"/>
+          <rect x="104" y="48" width="18" height="98"/>
+          <rect x="128" y="78" width="26" height="68"/>
+          <rect x="160" y="92" width="22" height="54"/>
+          <rect x="188" y="58" width="26" height="88"/>
+          <rect x="220" y="96" width="30" height="50"/>
+        </g>
+        <g fill="#ffcf3d">
+          <rect x="16" y="94" width="3" height="3"/><rect x="24" y="106" width="3" height="3"/>
+          <rect x="48" y="72" width="3" height="3"/><rect x="48" y="88" width="3" height="3"/>
+          <rect x="74" y="108" width="3" height="3"/><rect x="88" y="120" width="3" height="3"/>
+          <rect x="110" y="56" width="3" height="3"/><rect x="110" y="72" width="3" height="3"/>
+          <rect x="134" y="86" width="3" height="3"/><rect x="146" y="104" width="3" height="3"/>
+          <rect x="194" y="66" width="3" height="3"/><rect x="204" y="82" width="3" height="3"/>
+          <rect x="228" y="104" width="3" height="3"/>
+        </g>
+        <!-- growth curve: the company -->
+        <g fill="#38f2ff">
+          <rect x="14" y="132" width="10" height="6"/>
+          <rect x="34" y="126" width="10" height="12"/>
+          <rect x="54" y="118" width="10" height="20"/>
+          <rect x="74" y="108" width="10" height="30"/>
+          <rect x="94" y="96" width="10" height="42"/>
+          <rect x="114" y="84" width="10" height="54"/>
+          <rect x="134" y="70" width="10" height="68"/>
+        </g>
+        <g fill="#c8ff3d">
+          <rect x="154" y="60" width="10" height="78"/>
+          <rect x="174" y="48" width="10" height="90"/>
+          <rect x="194" y="34" width="10" height="104"/>
+          <rect x="214" y="22" width="10" height="116"/>
+          <rect x="234" y="10" width="10" height="128"/>
+        </g>
+        <!-- crown at the top of the curve -->
+        <g fill="#ffcf3d">
+          <rect x="232" y="0" width="18" height="3"/>
+          <rect x="232" y="3" width="3" height="4"/>
+          <rect x="239" y="3" width="3" height="4"/>
+          <rect x="247" y="3" width="3" height="4"/>
+        </g>
+        <g fill="#ff3f8e">
+          <rect x="86" y="88" width="28" height="4"/>
+          <rect x="86" y="92" width="6" height="10"/>
+          <rect x="108" y="92" width="6" height="10"/>
+        </g>
+        <rect x="0" y="146" width="260" height="4" fill="#c8ff3d" opacity="0.5"/>
+      </svg>
+      <div class="si-art-cap">
+        <span>SKILLS &rarr; PRODUCT &rarr; COMPANY</span>
+        <span class="si-art-blink">▲</span>
+      </div>
     </div>
   </section>
 
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
-      <span>12 HAND-PIXELLED SYMBOLS</span><span><b>·</b></span>
-      <span>TRAFFIC DODGING</span><span><b>·</b></span>
-      <span>TURN-BASED TENSION</span><span><b>·</b></span>
-      <span>NITRO BOOST</span><span><b>·</b></span>
-      <span>FRIENDSHIP STRESS TEST</span><span><b>·</b></span>
-      <span>11 LAB EXPERIMENTS</span><span><b>·</b></span>
-      <span>12 HAND-PIXELLED SYMBOLS</span><span><b>·</b></span>
-      <span>TRAFFIC DODGING</span><span><b>·</b></span>
-      <span>TURN-BASED TENSION</span><span><b>·</b></span>
-      <span>NITRO BOOST</span><span><b>·</b></span>
-      <span>FRIENDSHIP STRESS TEST</span><span><b>·</b></span>
-      <span>11 LAB EXPERIMENTS</span><span><b>·</b></span>
+      <span>ONE IDENTITY</span><span><b>·</b></span>
+      <span>TWO UNIVERSES</span><span><b>·</b></span>
+      <span>SKILLS BECOME CAPITAL</span><span><b>·</b></span>
+      <span>REAL LEDGER, NO MAGIC MONEY</span><span><b>·</b></span>
+      <span>TWO MILESTONES</span><span><b>·</b></span>
+      <span>ONE IDENTITY</span><span><b>·</b></span>
+      <span>TWO UNIVERSES</span><span><b>·</b></span>
+      <span>SKILLS BECOME CAPITAL</span><span><b>·</b></span>
+      <span>REAL LEDGER, NO MAGIC MONEY</span><span><b>·</b></span>
+      <span>TWO MILESTONES</span><span><b>·</b></span>
     </div>
   </div>
 
-  <section class="wrap" aria-labelledby="pick">
+  <section id="universes" aria-labelledby="universes-title">
     <div class="section-head">
       <div>
-        <h2 id="pick">Select your game</h2>
-        <p>All of it takes a friend on the same device — or go solo against the chess ladder. Press play, hand over half the keyboard, go.</p>
-      </div>
-      <span class="tag live">3 + 11 GAMES LOADED</span>
-    </div>
-
-    <div class="game-grid">
-      <a class="game-card" href="./memory.html">
-        <div class="card-art mem">
-          <div class="pv-cards">
-            <div class="pv-card"></div>
-            <div class="pv-card"></div>
-            <div class="pv-card"></div>
-            <div class="pv-card"></div>
-          </div>
-          <div class="checker"></div>
-        </div>
-        <div class="card-body">
-          <div class="card-tags">
-            <span class="tag hot">1–2 PLAYERS</span>
-            <span class="tag">TURN BASED</span>
-            <span class="tag">BRAINY</span>
-          </div>
-          <h3>Memory Match</h3>
-          <p>Flip pairs of pixel relics. Match and score again; miss and the turn is theirs. Solo runs are timed, versus runs are personal.</p>
-          <span class="card-cta">PLAY MEMORY</span>
-        </div>
-      </a>
-
-      <a class="game-card" href="./race.html">
-        <div class="card-art race">
-          <div class="pv-road"></div>
-          <div class="pv-car"></div>
-          <div class="checker"></div>
-        </div>
-        <div class="card-body">
-          <div class="card-tags">
-            <span class="tag hot">1–2 PLAYERS</span>
-            <span class="tag">SAME KEYBOARD</span>
-            <span class="tag">FAST</span>
-          </div>
-          <h3>Turbo Dash</h3>
-          <p>Weave through oncoming traffic on a scrolling night highway. First to 1600 m takes it — nitro pods are fair game.</p>
-          <span class="card-cta">PLAY TURBO DASH</span>
-        </div>
-      </a>
-
-      <a class="game-card" href="./chess.html">
-        <div class="card-art chess">
-          <div class="pv-board"></div>
-          <div class="pv-piece" aria-hidden="true">♞</div>
-          <div class="checker"></div>
-        </div>
-        <div class="card-body">
-          <div class="card-tags">
-            <span class="tag hot">1–2 PLAYERS</span>
-            <span class="tag">TURN BASED</span>
-            <span class="tag">8 AI LEVELS</span>
-          </div>
-          <h3>Chess</h3>
-          <p>Hotseat chess for two, or climb solo from Pawn to Grandmaster one checkmate at a time.</p>
-          <span class="card-cta">PLAY CHESS</span>
-        </div>
-      </a>
-
-      <a class="game-card labs-callout" href="./labs.html">
-        <div class="card-art labs">
-          <span class="labs-badge" aria-hidden="true">LABS</span>
-          <div class="checker"></div>
-        </div>
-        <div class="card-body">
-          <div class="card-tags">
-            <span class="tag hot">11 GAMES</span>
-            <span class="tag">XP · K-POINTS</span>
-            <span class="tag">EXPERIMENTS</span>
-          </div>
-          <h3>Arcade Labs</h3>
-          <p>Word battles, 2048, typing, sudoku, geography, code and startup tycoon. One progression system, endless excuses to lose track of time.</p>
-          <span class="card-cta">ENTER THE LABS</span>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <section class="wrap" aria-labelledby="how">
-    <div class="section-head">
-      <div>
-        <h2 id="how">How to play with a friend</h2>
-        <p>No installs, no logins, no "can you send me an invite" — just three steps.</p>
+        <h2 id="universes-title">Two universes, one save file</h2>
+        <p>You are a student first. Everything you learn is currency in the startup half of the world.</p>
       </div>
     </div>
 
-    <div class="steps">
-      <article class="step">
-        <span class="num">01</span>
-        <h3>Pick a game</h3>
-        <p>Memory Match for a slow, suspicious battle. Turbo Dash for shouting. Chess for silent revenge.</p>
-      </article>
-      <article class="step">
-        <span class="num">02</span>
-        <h3>Grab a person</h3>
-        <p>Two players share one keyboard. Player 2 takes the arrow keys, Player 1 the left side.</p>
-        <div class="keys">
-          <kbd>A</kbd><kbd>D</kbd><kbd>W</kbd><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd>
+    <div class="si-split">
+      <article class="si-card si-card-student">
+        <div class="si-card-head">
+          <span class="tag hot">UNIVERSE A</span>
+          <span class="si-card-no">01</span>
         </div>
+        <h3>Student Life</h3>
+        <p>Learn, build a portfolio, compete, meet people, and find out what you are actually good at.</p>
+        <ul class="si-list">
+          <li>Identity: handle, avatar, bio, education stage, interests</li>
+          <li>15 learning categories with server-scored challenges</li>
+          <li>Skill tree: technical, business and creative branches</li>
+          <li>Projects you can publish &mdash; and promote into a company</li>
+          <li>Competitions, career readiness and reputation</li>
+        </ul>
+        <span class="si-foot">STAGE 1 &middot; F3&ndash;F4</span>
       </article>
-      <article class="step">
-        <span class="num">03</span>
-        <h3>Bragging rights</h3>
-        <p>Scores are saved on this device. The record strip below remembers the damage.</p>
-        <div class="keys"><kbd>R</kbd> RESTART</div>
+
+      <article class="si-card si-card-startup">
+        <div class="si-card-head">
+          <span class="tag hot">UNIVERSE B</span>
+          <span class="si-card-no">02</span>
+        </div>
+        <h3>Startup Life</h3>
+        <p>Turn skills and projects into a company, then keep it alive with real numbers.</p>
+        <ul class="si-list">
+          <li>13-step creation wizard that saves your drafts</li>
+          <li>20 industries &mdash; four with real mechanics at launch</li>
+          <li>Dashboard: cash, MRR, expenses, profit, valuation, runway</li>
+          <li>Every rupee recorded in an append-only ledger</li>
+          <li>Co-founders, employees, campaigns and market events</li>
+        </ul>
+        <span class="si-foot">STAGE 1 &middot; F5&ndash;F6</span>
       </article>
     </div>
   </section>
 
-  <section class="wrap" aria-labelledby="records">
+  <section id="bridge" aria-labelledby="bridge-title">
     <div class="section-head">
       <div>
-        <h2 id="records">Your local records</h2>
-        <p>Across the Arcade and Arcade Labs. Stored in this browser only — beating a friend is more important, but this is a start.</p>
+        <h2 id="bridge-title">The link is the product</h2>
+        <p>If a student action does not change the business simulation, it does not ship.</p>
       </div>
     </div>
 
-    <div class="panel flat rec-list">
-      <div class="rec-row">
-        <span class="rec-name">
-          <span data-sprite="star"></span>
-          <b>MEMORY BEST</b>
-        </span>
-        <span class="rec-val" style="color:var(--neon)" id="recMemory">—</span>
+    <div class="si-bridge">
+      <div class="si-flow">
+        <span class="si-flow-from">PROGRAMMING SKILL</span>
+        <span class="si-flow-arrow" aria-hidden="true">&rarr;</span>
+        <span class="si-flow-to">cheaper, faster product builds</span>
       </div>
-      <div class="rec-row">
-        <span class="rec-name">
-          <span data-sprite="gem"></span>
-          <b>TURBO DASH BEST</b>
-        </span>
-        <span class="rec-val" style="color:var(--pink)" id="recRace">—</span>
+      <div class="si-flow">
+        <span class="si-flow-from">PUBLISHED PROJECT</span>
+        <span class="si-flow-arrow" aria-hidden="true">&rarr;</span>
+        <span class="si-flow-to">company launches with a real product</span>
       </div>
-      <div class="rec-row">
-        <span class="rec-name">
-          <span data-sprite="crown"></span>
-          <b>CHESS BEST</b>
-        </span>
-        <span class="rec-val" style="color:var(--gold)" id="recChess">—</span>
+      <div class="si-flow">
+        <span class="si-flow-from">MARKETING SKILL</span>
+        <span class="si-flow-arrow" aria-hidden="true">&rarr;</span>
+        <span class="si-flow-to">campaigns reach further</span>
       </div>
-      <div class="rec-row">
-        <span class="rec-name">
-          <span data-sprite="ghost"></span>
-          <b>ARCADE LABS BEST</b>
-        </span>
-        <span class="rec-val" style="color:var(--violet)" id="recLabs">—</span>
+      <div class="si-flow">
+        <span class="si-flow-from">COMPETITION WIN</span>
+        <span class="si-flow-arrow" aria-hidden="true">&rarr;</span>
+        <span class="si-flow-to">reputation, better hires and offers</span>
       </div>
     </div>
+    <p class="si-note">
+      Bonuses are capped and never guarantee success: skills tilt the odds, they do not replace the decision.
+    </p>
   </section>
+
+  <section id="icon-ai" aria-labelledby="ai-title">
+    <div class="section-head">
+      <div>
+        <h2 id="ai-title">ICON AI</h2>
+        <p>Ten personalities, one orchestrator, three routes: your machine, the cloud, or plain arithmetic.</p>
+      </div>
+    </div>
+
+    <div class="si-personas">
+      <span class="si-chip">Mentor</span>
+      <span class="si-chip">Founder</span>
+      <span class="si-chip">Strategist</span>
+      <span class="si-chip">Analyst</span>
+      <span class="si-chip">Creator</span>
+      <span class="si-chip">Negotiator</span>
+      <span class="si-chip">Investor</span>
+      <span class="si-chip">Customer</span>
+      <span class="si-chip">Career Guide</span>
+      <span class="si-chip">Researcher</span>
+    </div>
+
+    <div class="si-routes">
+      <div class="si-route">
+        <span class="si-route-task">NPC dialogue &middot; explanations &middot; simple ideas</span>
+        <span class="si-route-badge local">LOCAL MODEL</span>
+      </div>
+      <div class="si-route">
+        <span class="si-route-task">Startup strategy &middot; deep analysis &middot; long content</span>
+        <span class="si-route-badge cloud">CLOUD</span>
+      </div>
+      <div class="si-route">
+        <span class="si-route-task">Every number that touches money</span>
+        <span class="si-route-badge math">DETERMINISTIC</span>
+      </div>
+    </div>
+    <p class="si-note">
+      The AI has no write access to balances. It can propose; only a server rule can move money.
+      Stage 2 &mdash; adapters, budgets and memory are planned, not built.
+    </p>
+  </section>
+
+  <section id="milestones" aria-labelledby="milestones-title">
+    <div class="section-head">
+      <div>
+        <h2 id="milestones-title">The dual milestone</h2>
+        <p>Two separate achievements. Valuation is not revenue, and the two are never added together.</p>
+      </div>
+    </div>
+
+    <div class="si-split si-milestones">
+      <article class="si-card">
+        <div class="si-card-head">
+          <span class="tag">VALUATION ICON</span>
+          <span class="si-card-no">2B</span>
+        </div>
+        <p class="si-target">&#8377;2,000,000,000</p>
+        <p class="si-sub">One company's simulated valuation</p>
+        <div class="si-meter" role="img" aria-label="Valuation progress: not tracked yet">
+          <span class="si-meter-fill" style="width:0%"></span>
+        </div>
+        <span class="si-foot">0 / 2,000,000,000 &middot; TRACKING IN F6</span>
+      </article>
+
+      <article class="si-card">
+        <div class="si-card-head">
+          <span class="tag">REVENUE ICON</span>
+          <span class="si-card-no">2B</span>
+        </div>
+        <p class="si-target">&#8377;2,000,000,000</p>
+        <p class="si-sub">Cumulative ledger-posted revenue</p>
+        <div class="si-meter gold" role="img" aria-label="Revenue progress: not tracked yet">
+          <span class="si-meter-fill" style="width:0%"></span>
+        </div>
+        <span class="si-foot">0 / 2,000,000,000 &middot; TRACKING IN F6</span>
+      </article>
+    </div>
+    <p class="si-note">
+      Both are available in &#8377; or $ &mdash; chosen per company. The Dual Icon needs both, in the same currency.
+      Progress is computed from the ledger on the server, never typed in.
+    </p>
+  </section>
+
+  <section id="status" aria-labelledby="status-title">
+    <div class="section-head">
+      <div>
+        <h2 id="status-title">What is actually live</h2>
+        <p>No feature is listed as working until its own check passes. This board moves as the build moves.</p>
+      </div>
+      <span class="tag live">BUILDING IN PUBLIC</span>
+    </div>
+
+    <div class="si-status" role="table" aria-label="Build status">
+      <div class="si-status-row" role="row">
+        <span role="cell">Arcade + Arcade Labs (11 games, XP, K-Points)</span>
+        <span role="cell"><span class="si-badge live">LIVE</span></span>
+        <a role="cell" href="./arcade/index.html">play &rarr;</a>
+      </div>
+      <div class="si-status-row" role="row">
+        <span role="cell">F1 &middot; Student Icon at root, arcade relocated, landing page</span>
+        <span role="cell"><span class="si-badge done">DONE</span></span>
+        <span role="cell" class="si-cell-muted">this page</span>
+      </div>
+      <div class="si-status-row" role="row">
+        <span role="cell">F2 &middot; Database foundation (migrations 0003&ndash;0006, ledger, RLS)</span>
+        <span role="cell"><span class="si-badge done">DONE</span></span>
+        <span role="cell" class="si-cell-muted">58 checks pass</span>
+      </div>
+      <div class="si-status-row" role="row">
+        <span role="cell">F3 &middot; Accounts, onboarding, public profiles</span>
+        <span role="cell"><span class="si-badge building">BUILDING</span></span>
+        <span role="cell" class="si-cell-muted">accounts, onboarding &amp; public profiles &middot; hosted project pending</span>
+      </div>
+      <div class="si-status-row" role="row">
+        <span role="cell">F4 &middot; Student Universe: skills, learning, projects</span>
+        <span role="cell"><span class="si-badge building">BUILDING</span></span>
+        <a role="cell" href="./learn.html">skills &amp; challenges &rarr;</a>
+      </div>
+      <div class="si-status-row" role="row">
+        <span role="cell">F5 &middot; Startup Universe: wizard, dashboard, simulation</span>
+        <span role="cell"><span class="si-badge planned">PLANNED</span></span>
+        <span role="cell" class="si-cell-muted">&mdash;</span>
+      </div>
+      <div class="si-status-row" role="row">
+        <span role="cell">F6 &middot; Dual milestone + economy hardening</span>
+        <span role="cell"><span class="si-badge planned">PLANNED</span></span>
+        <span role="cell" class="si-cell-muted">&mdash;</span>
+      </div>
+      <div class="si-status-row" role="row">
+        <span role="cell">ICON AI &middot; local model + OpenRouter</span>
+        <span role="cell"><span class="si-badge stage2">STAGE 2</span></span>
+        <span role="cell" class="si-cell-muted">&mdash;</span>
+      </div>
+      <div class="si-status-row" role="row">
+        <span role="cell">Chat, teams, shared market</span>
+        <span role="cell"><span class="si-badge stage2">STAGE 3</span></span>
+        <span role="cell" class="si-cell-muted">&mdash;</span>
+      </div>
+    </div>
+    <p class="si-note">
+      Last updated 11 November 2026 &middot; a DONE row means its local checks pass and nothing more.
+      No row claims a feature that does not exist yet.
+    </p>
+  </section>
+
+  <section class="si-cta" aria-labelledby="cta-title">
+    <h2 id="cta-title">The arcade is open while the universe is built.</h2>
+    <p>Eleven games, one progression system, no sign-up. Student Icon's accounts arrive in F3.</p>
+    <div class="hero-actions">
+      <a class="btn" href="./arcade/index.html">Enter the arcade</a>
+      <a class="btn ghost" href="./arcade/labs.html">Arcade Labs</a>
+    </div>
+  </section>
+
 </main>
 
-<footer class="wrap footer">
-  <span>Three arcade classics, one couch, and a lab full of experiments. Progress lives in this browser.</span>
-  <span><b>PIXEL PALS ARCADE</b> · v2.0</span>
+<footer class="wrap wide footer">
+  <span>Student Icon &middot; foundation build &middot; the arcade lives at <b>/arcade/</b></span>
+  <span><b>STUDENT ICON</b> &middot; <span id="year">2026</span></span>
 </footer>
 
-<script type="module" src="./assets/js/home.js"></script>
+<script type="module" src="./assets/js/icon/home.js"></script>
 </body>
 </html>

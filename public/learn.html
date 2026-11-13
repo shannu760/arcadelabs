@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning challenges — Student Icon</title>
+<meta name="description" content="Student Icon learning challenges: pick one, answer it, and the server scores it — XP and skill levels come from passing, never from a form field.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2306050f'/%3E%3Crect x='1' y='4' width='6' height='3' fill='%23c8ff3d'/%3E%3Crect x='2' y='2' width='4' height='2' fill='%2338f2ff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/pixel.css">
+<link rel="stylesheet" href="./assets/css/onboarding.css">
+<link rel="stylesheet" href="./assets/css/learn.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap wide topbar-inner">
+    <a class="brand" href="./index.html">
+      <span class="brand-slot" aria-hidden="true"></span>
+      <span class="brand-name">STUDENT<b>ICON</b></span>
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="./index.html">HOME</a>
+      <a href="./skills.html">SKILLS</a>
+      <a href="./arcade/index.html">ARCADE</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap wide si-learn">
+
+  <div class="si-learn-head">
+    <span class="eyebrow">F4 &middot; LEARNING</span>
+    <h1>Answer it and the <span class="neon">server</span> scores it.</h1>
+    <p class="lede">
+      Every challenge names a skill. A pass awards its XP once and moves that skill's level; a
+      repeat pays nothing. The answers live on the server and never reach this page until you have
+      been scored.
+    </p>
+  </div>
+
+  <div class="si-learn-body">
+
+    <section class="si-learn-list" id="list" aria-label="Challenges">
+      <p class="si-hint" id="list-note">Loading challenges…</p>
+    </section>
+
+    <aside class="si-panel si-challenge" id="panel" aria-live="polite">
+      <p class="si-panel-lede" id="panel-empty">Pick a challenge to see the brief.</p>
+
+      <div id="panel-body" hidden>
+        <span class="eyebrow" id="ch-category"></span>
+        <h2 class="si-panel-title" id="ch-title"></h2>
+        <p class="si-panel-lede" id="ch-objective"></p>
+        <p class="si-brief" id="ch-brief"></p>
+
+        <div class="si-field">
+          <span class="si-label">WHAT TO DO</span>
+          <ul class="si-tasks" id="ch-tasks"></ul>
+        </div>
+
+        <form id="ch-form">
+          <div class="si-field" id="ch-answer"></div>
+          <p class="si-error" id="ch-error" role="alert" hidden></p>
+          <div class="si-actions">
+            <button class="btn" type="submit" id="ch-submit">Submit answer</button>
+            <button class="btn ghost small" type="button" id="ch-close">Close</button>
+          </div>
+        </form>
+
+        <div class="si-result" id="ch-result" hidden>
+          <p class="si-result-line" id="ch-result-line"></p>
+          <p class="si-result-detail" id="ch-result-detail"></p>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<footer class="si-foot">
+  <span>STUDENT ICON &middot; LEARNING</span>
+  <span>IDENTITY &middot; SKILLS &middot; CHALLENGES &middot; <a href="./index.html">HOME</a></span>
+</footer>
+
+<script type="module" src="./assets/js/icon/learn.js"></script>
+</body>
+</html>

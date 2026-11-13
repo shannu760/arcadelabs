@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create your player — Student Icon</title>
+<meta name="description" content="Set up your Student Icon identity: a permanent handle, your profile, and the focus that follows you from student life into startup life.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2306050f'/%3E%3Crect x='1' y='4' width='6' height='3' fill='%23c8ff3d'/%3E%3Crect x='2' y='2' width='4' height='2' fill='%2338f2ff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/pixel.css">
+<link rel="stylesheet" href="./assets/css/onboarding.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap wide topbar-inner">
+    <a class="brand" href="./index.html">
+      <span class="brand-slot" aria-hidden="true"></span>
+      <span class="brand-name">STUDENT<b>ICON</b></span>
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="./index.html">HOME</a>
+      <a href="./arcade/index.html">ARCADE</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap wide si-onboard">
+
+  <div class="si-onboard-head">
+    <span class="eyebrow">FOUNDATION &middot; ACCOUNT SETUP</span>
+    <h1>Create your <span class="neon">player</span>.</h1>
+    <p class="lede">One identity for both halves of the universe. Your handle is permanent — it becomes the address other players use to find you.</p>
+  </div>
+
+  <div class="si-onboard-body">
+
+    <aside class="si-steps" aria-label="Setup progress">
+      <ol>
+        <li data-stepmark="0" id="stepmark-account" hidden><span>00</span> ACCOUNT</li>
+        <li data-stepmark="1" class="is-active"><span>01</span> IDENTITY</li>
+        <li data-stepmark="2"><span>02</span> PROFILE</li>
+        <li data-stepmark="3"><span>03</span> FOCUS</li>
+        <li data-stepmark="4"><span>04</span> READY</li>
+      </ol>
+      <p class="si-steps-note" id="mode-note">Checking how this build signs players in…</p>
+    </aside>
+
+    <section class="si-panel">
+
+      <!-- ----------------------------------------------------- 00 account -->
+      <div data-step="0" hidden>
+        <h2 class="si-panel-title">00 &middot; Account</h2>
+        <p class="si-panel-lede">A real account, so your player survives this device. Signing in elsewhere brings the same save file with it.</p>
+
+        <div class="si-authtabs" role="tablist" aria-label="Account mode">
+          <button type="button" class="si-authtab is-active" role="tab" aria-selected="true" data-authmode="signup">Create account</button>
+          <button type="button" class="si-authtab" role="tab" aria-selected="false" data-authmode="signin">Sign in</button>
+        </div>
+
+        <div class="si-field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" spellcheck="false" required>
+        </div>
+
+        <div class="si-field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required>
+          <p class="si-hint" id="auth-hint">Eight characters or more. Supabase Auth stores the password; this server never sees it.</p>
+          <button type="button" class="si-linkbtn" id="forgot" hidden>Forgot your password?</button>
+        </div>
+
+        <p class="si-note" id="auth-note" hidden></p>
+        <p class="si-error" id="auth-error" role="alert" hidden></p>
+
+        <div class="si-actions">
+          <button class="btn" type="button" id="to-identity">Create account</button>
+        </div>
+      </div>
+
+      <!-- ---------------------------------------------------- 01 identity -->
+      <div data-step="1" hidden>
+        <h2 class="si-panel-title">01 &middot; Identity</h2>
+        <p class="si-panel-lede">Choose the name other players will see. Lowercase letters, numbers and underscores, three to twenty characters.</p>
+
+        <div class="si-field">
+          <label for="handle">Handle</label>
+          <div class="si-inputrow">
+            <span class="si-prefix" aria-hidden="true">@</span>
+            <input id="handle" name="handle" type="text" inputmode="text" autocomplete="username" maxlength="20" placeholder="ada" spellcheck="false" required>
+          </div>
+          <p class="si-hint" id="handle-hint">This becomes your public address. It cannot change later.</p>
+        </div>
+
+        <div class="si-field">
+          <label for="displayName">Display name</label>
+          <input id="displayName" name="displayName" type="text" maxlength="40" placeholder="Ada Lovelace" autocomplete="nickname" required>
+          <p class="si-hint">One to forty characters. You can change this whenever you like.</p>
+        </div>
+
+        <p class="si-error" id="step1-error" role="alert" hidden></p>
+
+        <div class="si-actions">
+          <button class="btn" type="button" id="to-profile">Continue</button>
+        </div>
+      </div>
+
+      <!-- ----------------------------------------------------- 02 profile -->
+      <div data-step="2" hidden>
+        <h2 class="si-panel-title">02 &middot; About you</h2>
+        <p class="si-panel-lede">Where you are in life shapes what the simulator offers you. You can change all of this later.</p>
+
+        <div class="si-grid2">
+          <div class="si-field">
+            <label for="educationStage">Education stage</label>
+            <select id="educationStage">
+              <option value="">Prefer not to say</option>
+              <option value="school">School</option>
+              <option value="college">College / sixth form</option>
+              <option value="university">University</option>
+              <option value="graduate">Just graduated</option>
+              <option value="working">Working</option>
+              <option value="other">Something else</option>
+            </select>
+          </div>
+
+          <div class="si-field">
+            <label for="country">Country</label>
+            <select id="country">
+              <option value="">Prefer not to say</option>
+              <option value="GB">United Kingdom</option>
+              <option value="US">United States</option>
+              <option value="IN">India</option>
+              <option value="NG">Nigeria</option>
+              <option value="KE">Kenya</option>
+              <option value="ZA">South Africa</option>
+              <option value="CA">Canada</option>
+              <option value="AU">Australia</option>
+              <option value="DE">Germany</option>
+              <option value="FR">France</option>
+              <option value="BR">Brazil</option>
+              <option value="SG">Singapore</option>
+              <option value="AE">United Arab Emirates</option>
+              <option value="PH">Philippines</option>
+              <option value="PK">Pakistan</option>
+              <option value="BD">Bangladesh</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="si-field">
+          <label for="bio">Short bio <em class="si-optional">optional</em></label>
+          <textarea id="bio" maxlength="280" rows="3" placeholder="What are you learning or building right now?"></textarea>
+          <p class="si-hint"><span id="bio-count">0</span> / 280</p>
+        </div>
+
+        <fieldset class="si-field si-radios">
+          <legend>Profile visibility</legend>
+          <label class="si-radio"><input type="radio" name="visibility" value="public" checked> <span><b>Public</b> — your profile can be found by handle</span></label>
+          <label class="si-radio"><input type="radio" name="visibility" value="unlisted"> <span><b>Unlisted</b> — only you can see it</span></label>
+        </fieldset>
+
+        <p class="si-error" id="step2-error" role="alert" hidden></p>
+
+        <div class="si-actions">
+          <button class="btn ghost" type="button" data-back="1">Back</button>
+          <button class="btn" type="button" id="to-focus">Continue</button>
+        </div>
+      </div>
+
+      <!-- ------------------------------------------------------- 03 focus -->
+      <div data-step="3" hidden>
+        <h2 class="si-panel-title">03 &middot; Focus</h2>
+        <p class="si-panel-lede">What pulls you in? These steer the challenges and companies the simulator puts in front of you.</p>
+
+        <div class="si-field">
+          <span class="si-label">Interests</span>
+          <div class="si-chips" id="interest-chips"></div>
+          <div class="si-custom">
+            <input id="custom-interest" type="text" maxlength="40" placeholder="Add your own" aria-label="Add a custom interest">
+            <button class="btn ghost small" type="button" id="add-interest">Add</button>
+          </div>
+          <p class="si-hint"><span id="interest-count">0</span> / 12 selected</p>
+        </div>
+
+        <div class="si-field">
+          <span class="si-label">Career paths</span>
+          <div class="si-chips" id="career-chips"></div>
+          <p class="si-hint"><span id="career-count">0</span> selected &middot; optional</p>
+        </div>
+
+        <p class="si-error" id="step3-error" role="alert" hidden></p>
+
+        <div class="si-actions">
+          <button class="btn ghost" type="button" data-back="2">Back</button>
+          <button class="btn" type="button" id="finish">Finish setup</button>
+        </div>
+      </div>
+
+      <!-- ------------------------------------------------------- 04 ready -->
+      <div data-step="4" hidden>
+        <h2 class="si-panel-title">04 &middot; Ready</h2>
+        <p class="si-panel-lede">Your player exists. Everything from here writes to the same save file.</p>
+
+        <div class="si-summary">
+          <div class="si-summary-row" id="sum-account-row" hidden><span>ACCOUNT</span><b id="sum-email">—</b></div>
+          <div class="si-summary-row"><span>HANDLE</span><b id="sum-handle">@</b></div>
+          <div class="si-summary-row"><span>RANK</span><b id="sum-rank">Dreamer</b></div>
+          <div class="si-summary-row"><span>XP</span><b id="sum-xp">0</b></div>
+          <div class="si-summary-row"><span>VISIBILITY</span><b id="sum-visibility">PUBLIC</b></div>
+        </div>
+
+        <p class="si-summary-note" id="sum-focus"></p>
+
+        <div class="si-actions">
+          <a class="btn" href="./index.html">Enter Student Icon</a>
+          <a class="btn" id="view-profile" href="./profile.html">View public profile</a>
+          <a class="btn ghost" href="./arcade/index.html">Play the arcade</a>
+          <button class="btn ghost small" type="button" id="signout" hidden>Sign out</button>
+        </div>
+      </div>
+
+      <!-- ------------------------------------------------------ locked -->
+      <div data-step="locked" id="locked" hidden>
+        <h2 class="si-panel-title">Sign-in is not connected</h2>
+        <p class="si-panel-lede" id="locked-reason"></p>
+        <div class="si-actions">
+          <a class="btn ghost" href="./index.html">Back to Student Icon</a>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</main>
+
+<footer class="si-foot">
+  <span>STUDENT ICON &middot; FOUNDATION</span>
+  <span>IDENTITY &middot; PROFILE &middot; LEDGER &middot; <a href="./index.html">HOME</a></span>
+</footer>
+
+<script type="module" src="./assets/js/icon/onboarding.js"></script>
+</body>
+</html>

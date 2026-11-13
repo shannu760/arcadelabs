@@ -1,0 +1,19 @@
+{
+  "name": "student-icon",
+  "private": true,
+  "type": "module",
+  "description": "Student Icon — student-to-entrepreneur universe (static frontend + local API)",
+  "scripts": {
+    "dev": "node server.mjs",
+    "test:api": "node .labtest/api.mjs",
+    "test:auth": "node .labtest/auth.mjs",
+    "check:auth": "node scripts/check-auth.mjs",
+    "verify:live": "node scripts/verify-live.mjs",
+    "test:live": "node .labtest/live-verify.mjs",
+    "test:icon": "node .labtest/icon.mjs",
+    "test:arcade": "node .labtest/games.mjs && node .labtest/code.mjs"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.15"
+  }
+}

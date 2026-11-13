@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Player — Student Icon</title>
+<meta name="description" content="A Student Icon player profile: handle, rank, focus and the projects that follow them from student life into startup life.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2306050f'/%3E%3Crect x='1' y='4' width='6' height='3' fill='%23c8ff3d'/%3E%3Crect x='2' y='2' width='4' height='2' fill='%2338f2ff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/pixel.css">
+<link rel="stylesheet" href="./assets/css/onboarding.css">
+<link rel="stylesheet" href="./assets/css/profile.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap wide topbar-inner">
+    <a class="brand" href="./index.html">
+      <span class="brand-slot" aria-hidden="true"></span>
+      <span class="brand-name">STUDENT<b>ICON</b></span>
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="./index.html">HOME</a>
+      <a href="./arcade/index.html">ARCADE</a>
+      <a href="./onboarding.html">ACCOUNT</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap wide si-profile">
+
+  <section class="si-profile-state" id="state-loading" aria-live="polite">
+    <span class="eyebrow">PLAYER RECORD</span>
+    <h1>Loading <span class="neon">player</span>…</h1>
+  </section>
+
+  <section class="si-profile-state" id="state-missing" hidden aria-live="polite">
+    <span class="eyebrow">PLAYER RECORD</span>
+    <h1 id="missing-title">No player here.</h1>
+    <p class="lede" id="missing-reason">That address does not belong to a public player.</p>
+    <div class="si-actions">
+      <a class="btn" href="./onboarding.html">Create your player</a>
+      <a class="btn ghost" href="./index.html">Back to Student Icon</a>
+    </div>
+  </section>
+
+  <section id="profile-card" hidden>
+
+    <article class="si-pcard">
+      <div class="si-pcard-top">
+        <div class="si-avatar" id="avatar" aria-hidden="true"></div>
+
+        <div class="si-pcard-id">
+          <span class="eyebrow" id="p-visibility">PLAYER</span>
+          <h1 id="p-name">—</h1>
+          <p class="si-pcard-handle">&commat;<span id="p-handle">—</span></p>
+          <p class="si-pcard-meta" id="p-meta"></p>
+        </div>
+
+        <div class="si-pcard-rank">
+          <span class="si-rank-label">RANK</span>
+          <b id="p-rank">Dreamer</b>
+          <span class="si-rank-xp" id="p-xp">0 XP</span>
+        </div>
+      </div>
+
+      <p class="si-pcard-bio" id="p-bio" hidden></p>
+
+      <div class="si-tagblock" id="p-interests-block" hidden>
+        <span class="si-label">INTERESTS</span>
+        <div class="si-chips" id="p-interests"></div>
+      </div>
+
+      <div class="si-tagblock" id="p-careers-block" hidden>
+        <span class="si-label">CAREER PATHS</span>
+        <div class="si-chips" id="p-careers"></div>
+      </div>
+
+      <div class="si-pcard-actions">
+        <button class="btn" type="button" id="edit-toggle" hidden>Edit profile</button>
+        <a class="btn ghost small" href="./skills.html">Skill tree</a>
+        <a class="btn ghost small" href="./arcade/index.html">Play the arcade</a>
+      </div>
+    </article>
+
+    <form class="si-panel si-edit" id="edit-panel" hidden novalidate>
+      <h2 class="si-panel-title">Edit profile</h2>
+      <p class="si-panel-lede">
+        Only you can see this panel. Your handle &commat;<span id="edit-handle">—</span> is permanent —
+        it is the address other players use to find you.
+      </p>
+
+      <div class="si-field">
+        <label for="edit-name">Display name</label>
+        <input id="edit-name" type="text" maxlength="40" autocomplete="nickname" required>
+      </div>
+
+      <div class="si-grid2">
+        <div class="si-field">
+          <label for="edit-stage">Education stage</label>
+          <select id="edit-stage">
+            <option value="">Prefer not to say</option>
+            <option value="school">School</option>
+            <option value="college">College / sixth form</option>
+            <option value="university">University</option>
+            <option value="graduate">Just graduated</option>
+            <option value="working">Working</option>
+            <option value="other">Something else</option>
+          </select>
+        </div>
+
+        <div class="si-field">
+          <label for="edit-country">Country</label>
+          <select id="edit-country">
+            <option value="">Prefer not to say</option>
+            <option value="GB">United Kingdom</option>
+            <option value="US">United States</option>
+            <option value="IN">India</option>
+            <option value="NG">Nigeria</option>
+            <option value="KE">Kenya</option>
+            <option value="ZA">South Africa</option>
+            <option value="CA">Canada</option>
+            <option value="AU">Australia</option>
+            <option value="DE">Germany</option>
+            <option value="FR">France</option>
+            <option value="BR">Brazil</option>
+            <option value="SG">Singapore</option>
+            <option value="AE">United Arab Emirates</option>
+            <option value="PH">Philippines</option>
+            <option value="PK">Pakistan</option>
+            <option value="BD">Bangladesh</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="si-field">
+        <label for="edit-bio">Short bio <em class="si-optional">optional</em></label>
+        <textarea id="edit-bio" maxlength="280" rows="3" placeholder="What are you learning or building right now?"></textarea>
+        <p class="si-hint"><span id="edit-bio-count">0</span> / 280</p>
+      </div>
+
+      <div class="si-field">
+        <label for="edit-visibility">Visibility</label>
+        <select id="edit-visibility">
+          <option value="public">Public — anyone with your handle can find you</option>
+          <option value="unlisted">Unlisted — only you can see this profile</option>
+        </select>
+      </div>
+
+      <p class="si-error" id="edit-error" role="alert" hidden></p>
+      <p class="si-note" id="edit-note" hidden></p>
+
+      <div class="si-actions">
+        <button class="btn" type="submit" id="save">Save changes</button>
+        <button class="btn ghost" type="button" id="cancel">Cancel</button>
+      </div>
+    </form>
+
+  </section>
+</main>
+
+<footer class="si-foot">
+  <span>STUDENT ICON &middot; PLAYER RECORD</span>
+  <span>IDENTITY &middot; PROFILE &middot; LEDGER &middot; <a href="./index.html">HOME</a></span>
+</footer>
+
+<script type="module" src="./assets/js/icon/profile.js"></script>
+</body>
+</html>

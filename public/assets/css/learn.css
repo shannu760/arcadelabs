@@ -1,0 +1,114 @@
+/* ============================================================
+   STUDENT ICON — learning challenges
+   A list on the left, the selected challenge on the right.
+   ============================================================ */
+
+.si-learn { padding-bottom: 64px; }
+
+.si-learn-head { margin-top: 34px; max-width: 72ch; }
+.si-learn-head h1 { margin: 10px 0 14px; }
+.si-learn-head .lede { color: var(--muted); margin: 0; font-size: 19px; }
+
+.si-learn-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 22px;
+  margin-top: 28px;
+  align-items: start;
+}
+
+/* -------------------------------------------------------------- list */
+
+.si-learn-list { display: flex; flex-direction: column; gap: 10px; }
+
+.si-challenge-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 12px;
+  padding: 13px 15px;
+  background: var(--ink-2);
+  border: 2px solid var(--line);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.si-challenge-card:hover,
+.si-challenge-card:focus-visible { border-color: var(--line-2); outline: none; }
+.si-challenge-card.is-active { border-color: var(--neon); box-shadow: 0 0 0 2px rgba(200, 255, 61, 0.14); }
+.si-challenge-card.is-passed { opacity: 0.82; }
+
+.si-challenge-title {
+  font-family: "Press Start 2P", monospace;
+  font-size: 9px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.si-challenge-meta { color: var(--muted); font-size: 15px; grid-column: 1 / 2; }
+
+.si-challenge-xp {
+  grid-row: 1 / 3;
+  align-self: center;
+  font-family: "Press Start 2P", monospace;
+  font-size: 9px;
+  color: var(--cyan);
+  white-space: nowrap;
+}
+
+.si-challenge-card.is-passed .si-challenge-xp { color: var(--green); }
+
+/* -------------------------------------------------------------- panel */
+
+.si-challenge { position: sticky; top: 92px; }
+
+.si-brief { color: var(--text); margin: 0 0 18px; }
+
+.si-tasks { margin: 0; padding-left: 20px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+
+.si-answers { display: flex; flex-direction: column; gap: 8px; }
+
+.si-answer {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 9px 11px;
+  background: var(--ink);
+  border: 2px solid var(--line);
+  cursor: pointer;
+  color: var(--text);
+  font-size: 17px;
+}
+
+.si-answer:hover { border-color: var(--line-2); }
+.si-answer input { margin-top: 4px; accent-color: var(--neon); }
+
+.si-result {
+  margin-top: 18px;
+  padding: 14px;
+  border: 2px solid var(--line-2);
+  background: var(--ink-2);
+}
+
+.si-result.is-pass { border-color: var(--neon); }
+.si-result.is-fail { border-color: var(--pink); }
+
+.si-result-line {
+  margin: 0 0 8px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  line-height: 1.8;
+  color: var(--neon);
+}
+
+.si-result.is-fail .si-result-line { color: var(--pink); }
+.si-result-detail { margin: 0; color: var(--muted); font-size: 17px; }
+
+/* --------------------------------------------------------- responsive */
+
+@media (max-width: 900px) {
+  .si-learn-body { grid-template-columns: minmax(0, 1fr); }
+  .si-challenge { position: static; }
+}

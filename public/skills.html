@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skill tree — Student Icon</title>
+<meta name="description" content="The Student Icon skill tree: sixteen skills across technical, business and creative branches, levelled by the work you finish.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2306050f'/%3E%3Crect x='1' y='4' width='6' height='3' fill='%23c8ff3d'/%3E%3Crect x='2' y='2' width='4' height='2' fill='%2338f2ff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/pixel.css">
+<link rel="stylesheet" href="./assets/css/onboarding.css">
+<link rel="stylesheet" href="./assets/css/skills.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap wide topbar-inner">
+    <a class="brand" href="./index.html">
+      <span class="brand-slot" aria-hidden="true"></span>
+      <span class="brand-name">STUDENT<b>ICON</b></span>
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="./index.html">HOME</a>
+      <a href="./arcade/index.html">ARCADE</a>
+      <a href="./onboarding.html">ACCOUNT</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap wide si-skills">
+
+  <div class="si-skills-head">
+    <span class="eyebrow">F4 &middot; STUDENT UNIVERSE</span>
+    <h1>The <span class="neon">skill tree</span>.</h1>
+    <p class="lede">
+      Sixteen skills, three branches. Levels come from finishing work that exercises the skill —
+      never from a form field. Every skill caps at five levels, and the cap is enforced by the
+      server, not suggested by this page.
+    </p>
+  </div>
+
+  <div class="si-skill-summary">
+    <div class="si-stat"><span class="si-stat-label">LEVELS</span><b id="stat-levels">—</b></div>
+    <div class="si-stat"><span class="si-stat-label">SKILLS STARTED</span><b id="stat-started">—</b></div>
+    <div class="si-stat"><span class="si-stat-label">SKILL XP</span><b id="stat-xp">—</b></div>
+    <div class="si-stat"><span class="si-stat-label">CAP</span><b id="stat-cap">—</b></div>
+  </div>
+
+  <p class="si-hint" id="skills-note">Loading the tree…</p>
+
+  <div class="si-branches" id="branches" hidden></div>
+
+  <section class="si-skills-note">
+    <h2>How a level happens</h2>
+    <p>
+      A passing learning challenge that names a skill adds one skill XP; every three XP is one
+      level, up to that skill's cap. Level 0 means untrained, not locked — the tree is a record of
+      what you have done, not a gate you have to earn your way through.
+    </p>
+    <div class="hero-actions">
+      <a class="btn" href="./learn.html">Open learning challenges</a>
+      <a class="btn ghost" href="./onboarding.html">Create your player</a>
+      <a class="btn ghost" href="./index.html">Back to Student Icon</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="si-foot">
+  <span>STUDENT ICON &middot; SKILL TREE</span>
+  <span>IDENTITY &middot; PROFILE &middot; SKILLS &middot; <a href="./index.html">HOME</a></span>
+</footer>
+
+<script type="module" src="./assets/js/icon/skills.js"></script>
+</body>
+</html>
