@@ -129,6 +129,11 @@ function lock(message, title) {
   });
   el('locked').hidden = false;
   el('locked-reason').textContent = message;
+  // The note beside the steps would otherwise sit on "Checking how this build
+  // signs players in…" forever once the check has finished badly.
+  el('mode-note').textContent = isLocalHost()
+    ? 'No API on this machine, so there is nothing to sign in to yet.'
+    : 'Static deployment: accounts are not part of this build.';
   document.querySelectorAll('[data-stepmark]').forEach((mark) => {
     mark.classList.remove('is-active', 'is-done');
     mark.removeAttribute('aria-current');
