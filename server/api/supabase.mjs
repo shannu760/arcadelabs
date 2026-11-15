@@ -18,7 +18,12 @@ const TIMEOUT_MS = 10000;
 
 export const supabaseBase = () => String(process.env.SUPABASE_URL || '').replace(/\/+$/, '');
 
-export const supabaseKey = () => String(process.env.SUPABASE_ANON_KEY || '');
+/* Supabase renamed the anon key to a publishable key (sb_publishable_...).
+   Both are public, both go in the apikey header, so accept either spelling.
+   The secret / service-role key is deliberately not supported: nothing in this
+   API needs to bypass row-level security from a browser-facing process. */
+export const supabaseKey = () =>
+  String(process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || '');
 
 /** Calls a Supabase Auth endpoint with the anon key, optionally as a user. */
 export async function callSupabaseAuth(path, { method = 'GET', token, body } = {}) {

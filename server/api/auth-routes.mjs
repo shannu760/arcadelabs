@@ -64,7 +64,7 @@ const requireSupabase = () => {
     throw new HttpError(
       503,
       'auth_not_configured',
-      'Accounts are not connected yet. Set SUPABASE_URL and SUPABASE_ANON_KEY.'
+      'Accounts are not connected yet. Set SUPABASE_URL and SUPABASE_ANON_KEY (or SUPABASE_PUBLISHABLE_KEY).'
     );
   }
 };

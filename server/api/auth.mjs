@@ -17,8 +17,7 @@ import { supabaseBase, supabaseKey } from './supabase.mjs';
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const LOOPBACK_RE = /^(127\.0\.0\.1|::1|::ffff:127\.0\.0\.1)$/;
 
-export const supabaseConfigured = () =>
-  Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY);
+export const supabaseConfigured = () => Boolean(supabaseBase() && supabaseKey());
 
 export const authMode = () => (supabaseConfigured() ? 'supabase' : 'dev');
 
