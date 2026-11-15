@@ -232,18 +232,34 @@ retrieval is scoped by `user_id` and company membership, and never crosses accou
 | `OPENROUTER_BASE_URL` | `.env` | AI adapter |
 | `AI_MONTHLY_BUDGET_USD` | `.env` | budget guard |
 | `LOCAL_AI_BASE_URL`, `LOCAL_AI_MODEL` | `.env` | Ollama adapter |
-| `DATABASE_URL` | `.env` (server) | migrations, tests |
-| `SUPABASE_URL`, `SUPABASE_ANON_KEY` | `.env` (server) | account proxy, token verification |
-| `SUPABASE_SERVICE_ROLE_KEY` | `.env` (server only) | API writes |
+| `SUPABASE_DB_URL` (alias `DATABASE_URL`) | `.env` / host (server) | hosted Postgres; migrations; falls back to embedded PGlite when unset |
+| `SUPABASE_URL`, `SUPABASE_ANON_KEY` | `.env` / host (server) | account proxy, token verification |
+
+### Supabase keys this app uses
+
+The API needs **three** values: `SUPABASE_URL`, one publishable key, and the Postgres
+connection string. That is the whole list.
+
+| Key | Name here | Why |
+|---|---|---|
+| `sb_publishable_…` (the old `anon` key) | `SUPABASE_ANON_KEY` or `SUPABASE_PUBLISHABLE_KEY` | Sent as the `apikey` header on `/auth/v1` calls. Public by design; it only ever travels server-side because the browser holds a session token instead. |
+| Postgres connection string (session pooler URI) | `SUPABASE_DB_URL` | The API connects as the table owner and scopes every query by `user_id` in code. |
+
+**The secret / service-role key (`sb_secret_…`, formerly `service_role`) is never needed.**
+Nothing in this project bypasses row-level security, so it is not read by any code path, is not
+accepted as a substitute for the publishable key, and does not belong in `.env`, in the repo, or
+in any host environment. If one is ever added, the correct fix is to remove it, not to use it.
 
 ---
 
 ## 13. Deployment
 
-- Stage one runs locally: `node server.mjs` (static) + `node server/api/index.mjs` (API) + Supabase cloud.
-- Sites/Cloudflare can host the static frontend but **not the Node API** — so production needs one
-  small Node host (Render/Railway/Fly free tier) or a migration of the API into Supabase Edge
-  Functions later. Decision deferred to M14, as agreed.
+- Stage one runs locally: `node server.mjs` (static + API) + Supabase cloud.
+- Production: static files from `public/` on Vercel, and the same `handleApi()` mounted as the
+  Vercel function in `api/index.mjs` (every `/api/*` depth rewrites to it). The function needs
+  `SUPABASE_DB_URL`; without it `/api/health` answers `503 db_not_configured`.
+- A long-running Node host (Render/Railway/Fly) is still a valid alternative, and moving the API
+  into Supabase Edge Functions remains deferred to M14, as agreed.
 
 ---
 
