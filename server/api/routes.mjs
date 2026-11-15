@@ -12,7 +12,7 @@
        creation so public URLs never break.
 */
 
-import { getDb, DB_PATH } from './db.mjs';
+import { getDb, DB_KIND, DB_TARGET, ensureAuthRow } from './db.mjs';
 import { authenticate, authMode, UUID_RE } from './auth.mjs';
 import { handleAuth } from './auth-routes.mjs';
 import { HttpError, readJson, send, fail } from './http.mjs';
@@ -64,12 +64,13 @@ export async function handleApi(req, res, url) {
   const path = url.pathname.replace(/\/+$/, '') || '/api';
 
   try {
-    const db = await getDb();
-
-    // Account routes own their own authentication; they proxy Supabase Auth.
+    // Account routes own their own authentication and talk to Supabase Auth,
+    // not the database, so they must answer even when no database is set.
     if (path.startsWith('/api/auth/')) {
       return await handleAuth(req, res, url, method, path);
     }
+
+    const db = await getDb();
 
     const session = await authenticate(req);
 
@@ -82,8 +83,8 @@ export async function handleApi(req, res, url) {
       return send(res, 200, {
         ok: true,
         auth: authMode(),
-        db: 'pglite',
-        dbPath: DB_PATH,
+        db: DB_KIND,
+        dbTarget: DB_TARGET,
         migrations: '0003-0007',
         ...rows[0],
       });
@@ -245,9 +246,7 @@ export async function handleApi(req, res, url) {
       if (!rows.length) return fail(res, 404, 'not_found', 'No such challenge');
 
       // The profile FK requires the auth row, exactly as session sync does.
-      await db.query('insert into auth.users (id) values ($1) on conflict (id) do nothing', [
-        session.userId,
-      ]);
+      await ensureAuthRow(db, session.userId);
 
       const scored = await db.query(
         'select public.icon_submit_challenge($1, $2, $3::jsonb) as result',
@@ -281,9 +280,7 @@ export async function handleApi(req, res, url) {
         return fail(res, 400, 'invalid_display_name', 'Display name must be 1-40 characters');
       }
 
-      await db.query('insert into auth.users (id) values ($1) on conflict (id) do nothing', [
-        session.userId,
-      ]);
+      await ensureAuthRow(db, session.userId);
 
       const existing = await db.query('select * from public.profiles where id = $1', [
         session.userId,

@@ -1,4 +1,11 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "public"
+  "outputDirectory": "public",
+  "functions": {
+    "api/*.mjs": {
+      "includeFiles": "supabase/migrations/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/:handle([a-z0-9_]{3,20})", "destination": "/profile.html" }
+  ]
 }

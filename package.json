@@ -14,6 +14,7 @@
     "test:arcade": "node .labtest/games.mjs && node .labtest/code.mjs"
   },
   "dependencies": {
-    "@electric-sql/pglite": "^0.5.15"
+    "@electric-sql/pglite": "^0.5.15",
+    "pg": "^8.23.1"
   }
 }
