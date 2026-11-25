@@ -362,3 +362,138 @@ main > section { margin-top: 46px; }
   .marquee-track { animation: none; }
   html { scroll-behavior: auto; }
 }
+
+/* ---------------- sign-in layer ---------------- */
+
+.si-authbtn {
+  font-family: "Press Start 2P", monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: var(--neon);
+  background: transparent;
+  border: 3px solid var(--neon);
+  padding: 8px 10px;
+  box-shadow: 3px 3px 0 #000;
+}
+
+.si-authbtn:hover,
+.si-authbtn:focus-visible {
+  color: var(--ink);
+  background: var(--neon);
+  outline: none;
+}
+
+.si-authbtn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000; }
+
+body.si-layer-open { overflow: hidden; }
+
+.si-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(4, 3, 12, 0.84);
+}
+
+.si-layer[hidden] { display: none; }
+
+.si-layer-panel {
+  position: relative;
+  width: min(420px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  padding: 24px;
+  background: var(--panel);
+  border: 4px solid var(--line-2);
+  box-shadow: 10px 10px 0 #000;
+  animation: si-enter 160ms steps(4, end) both;
+}
+
+.si-layer-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--muted);
+  background: transparent;
+  border: 3px solid transparent;
+}
+
+.si-layer-close:hover,
+.si-layer-close:focus-visible {
+  color: var(--neon);
+  border-color: var(--line-2);
+  background: var(--ink-2);
+  outline: none;
+}
+
+.si-layer-title {
+  margin: 10px 0 8px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--neon);
+}
+
+.si-layer-lede {
+  margin: 0 0 20px;
+  font-size: 17px;
+  color: var(--muted);
+  max-width: 44ch;
+}
+
+.si-layer .si-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.si-layer .si-field label {
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+}
+
+.si-layer .si-field input { width: 100%; }
+
+.si-layer-note,
+.si-layer-error {
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  font-size: 16px;
+  border-left: 3px solid var(--line-2);
+  background: var(--ink-2);
+}
+
+.si-layer-note { color: var(--gold); }
+.si-layer-error { color: var(--pink); border-left-color: var(--pink); }
+
+.si-layer .btn { width: 100%; }
+
+.si-layer-foot {
+  margin: 18px 0 0;
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.si-layer .si-linkbtn {
+  font-size: 16px;
+  color: var(--cyan);
+  background: none;
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .si-layer-panel { animation: none; }
+}
