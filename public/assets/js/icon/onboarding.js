@@ -122,7 +122,7 @@ function go(step) {
   panel?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
-function lock(message, title) {
+function lock(message, title, note) {
   if (title) el('locked-title').textContent = title;
   document.querySelectorAll('[data-step]').forEach((panel) => {
     panel.hidden = true;
@@ -131,9 +131,11 @@ function lock(message, title) {
   el('locked-reason').textContent = message;
   // The note beside the steps would otherwise sit on "Checking how this build
   // signs players in…" forever once the check has finished badly.
-  el('mode-note').textContent = isLocalHost()
-    ? 'No API on this machine, so there is nothing to sign in to yet.'
-    : 'Static deployment: accounts are not part of this build.';
+  el('mode-note').textContent =
+    note ||
+    (isLocalHost()
+      ? 'No API on this machine, so there is nothing to sign in to yet.'
+      : 'Static deployment: accounts are not part of this build.');
   document.querySelectorAll('[data-stepmark]').forEach((mark) => {
     mark.classList.remove('is-active', 'is-done');
     mark.removeAttribute('aria-current');
@@ -624,17 +626,28 @@ async function loadCareers() {
 async function init() {
   bindEvents();
 
-  try {
-    const { status, data } = await api('/health', { auth: false });
-    state.health = status === 200 ? data : null;
-  } catch {
-    state.health = null;
-  }
+  /* Accounts and the database are separate services: a deployment can have
+     working accounts with no database behind the profiles. /api/health reports
+     the database only, so ask both and name whichever one is down. */
+  const [health, config] = await Promise.all([
+    api('/health', { auth: false }).catch(() => null),
+    api('/auth/config', { auth: false }).catch(() => null),
+  ]);
+
+  state.health = health?.status === 200 ? health.data : null;
+  const configMode = config?.data?.mode || null;
+  const dbMissing = health?.status === 503 && health?.data?.error?.code === 'db_not_configured';
 
   if (!state.health?.ok) {
     // A static host has no /api at all, so this is expected there — it is not a
     // visitor's mistake and not something they can fix by running a command.
-    if (isLocalHost()) {
+    if (dbMissing) {
+      lock(
+        'Accounts are connected, but the database that stores players is not, so a new player cannot be saved yet. Nothing is wrong with your browser and no account is affected. The arcade and the landing page still work.',
+        'The player database is not connected',
+        'Accounts are connected; the player database is not.'
+      );
+    } else if (isLocalHost()) {
       lock(
         'The API is not answering on this machine, so accounts cannot load. The page and the API are served by the same process, which needs to be running.',
         'The API is not running'
@@ -648,7 +661,7 @@ async function init() {
     return;
   }
 
-  if (state.health.auth === 'supabase') {
+  if ((configMode || state.health.auth) === 'supabase') {
     state.mode = 'supabase';
     el('stepmark-account').hidden = false;
     el('signout').hidden = false;
