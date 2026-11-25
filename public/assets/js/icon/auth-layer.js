@@ -4,9 +4,11 @@
    /api/auth/* routes the onboarding page uses. The password goes straight to
    the API; this page keeps only the returned token (see session.js).
 
-   The layer asks /api/health before showing a form. A static deployment with
-   no API gets a plain explanation, and a local dev build (auth mode "dev")
-   points at the account page instead of pretending a password will work. */
+   The layer asks /api/auth/config before showing a form. Accounts are their
+   own service, so they stay usable when the database behind the rest of the
+   site is not connected yet. A static deployment with no API gets a plain
+   explanation, and a local dev build (auth mode "dev") points at the account
+   page instead of pretending a password will work. */
 
 import { loadSession, saveSession } from './session.js';
 import { isLocalHost } from './api-status.js';
@@ -204,24 +206,22 @@ function closeLayer() {
 async function probe() {
   let res = null;
   try {
-    res = await fetch('/api/health', { headers: { accept: 'application/json' } });
+    res = await fetch('/api/auth/config', { headers: { accept: 'application/json' } });
   } catch {
     res = null;
   }
 
-  let data = null;
-  if (res) data = await res.json().catch(() => null);
+  const config = res?.ok ? await res.json().catch(() => null) : null;
 
-  if (res?.ok && data?.auth === 'supabase') {
+  if (config?.mode === 'supabase') {
     state.mode = 'supabase';
     enableForm();
     el('si-auth-email').focus();
     return;
   }
 
-  state.mode = res?.ok ? 'dev' : 'offline';
-
-  if (state.mode === 'dev') {
+  if (config) {
+    state.mode = 'dev';
     lock(
       'Local build',
       'This build keeps players on the machine it runs on, so there is no password to sign in with. Create or reopen your player on the account page.',
@@ -229,6 +229,8 @@ async function probe() {
     );
     return;
   }
+
+  state.mode = 'offline';
 
   lock(
     'Accounts are offline',
