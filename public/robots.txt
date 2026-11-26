@@ -1,0 +1,8 @@
+# Student Icon
+User-agent: *
+Allow: /
+
+# Signed-in-only surfaces are not useful to a crawler.
+Disallow: /api/
+
+Sitemap: https://arcadelabs-eight.vercel.app/sitemap.xml

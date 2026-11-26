@@ -299,7 +299,11 @@ async function submitAuth() {
 
   const { status, data } = await api(signup ? '/auth/signup' : '/auth/signin', {
     method: 'POST',
-    body: { email, password },
+    body: {
+      email,
+      password,
+      turnstileToken: window.turnstile?.getResponse?.() || undefined,
+    },
     auth: false,
   });
 
@@ -623,6 +627,28 @@ async function loadCareers() {
   state.careers = status === 200 && Array.isArray(data?.careers) ? data.careers : [];
 }
 
+/* Cloudflare Turnstile, only when the deployment configured a site key. The
+   server refuses a sign-up with a missing token once its secret is set; here it
+   is just the checkbox that produces one. */
+function mountTurnstile(siteKey) {
+  const slot = el('turnstile-slot');
+  if (!slot || !siteKey) return;
+
+  slot.hidden = false;
+
+  const widget = document.createElement('div');
+  widget.className = 'cf-turnstile';
+  widget.dataset.sitekey = siteKey;
+  widget.dataset.theme = 'dark';
+  slot.append(widget);
+
+  const script = document.createElement('script');
+  script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+  script.async = true;
+  script.defer = true;
+  document.head.append(script);
+}
+
 async function init() {
   bindEvents();
 
@@ -671,6 +697,8 @@ async function init() {
     const arrival = captureUrlSession();
     if (arrival?.error) setError(el('auth-error'), arrival.error);
     if (arrival?.notice) setNote(arrival.notice);
+
+    mountTurnstile(config?.data?.turnstileSiteKey);
 
     await loadCareers();
     renderChips();

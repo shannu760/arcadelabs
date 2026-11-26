@@ -18,3 +18,6 @@ dist/
 
 # local dev database
 .data/
+
+# logical backups (contain user data)
+.backups/

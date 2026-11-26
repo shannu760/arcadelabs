@@ -140,7 +140,8 @@ renderRecent();
 
 const note = document.getElementById('modeNote');
 if (note && cloudEnabled()) {
-  note.innerHTML = 'Cloud mode is configured. Signed-in sessions are verified and paid out by Postgres.';
+  note.innerHTML =
+    'Student Icon accounts work in the arcade too. Sign in and every finished session is verified and paid out by the server; signed-out play stays on this device.';
 }
 
 const p = profile();

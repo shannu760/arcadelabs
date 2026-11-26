@@ -28,7 +28,7 @@ grant execute on function auth.jwt() to anon, authenticated;
 
 await db.exec(stub);
 for (const file of ['0001_arcade_labs.sql', '0002_code_escape.sql']) {
-  const sql = await readFile(`../supabase/migrations/${file}`, 'utf8');
+  const sql = await readFile(new URL(`../supabase/migrations/${file}`, import.meta.url), 'utf8');
   await db.exec(sql.replace(/create extension if not exists pgcrypto;/i, ''));
   check(`${file} applies cleanly`, true);
 }

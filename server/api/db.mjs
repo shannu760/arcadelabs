@@ -32,11 +32,17 @@ const { Pool } = pg;
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
 export const MIGRATIONS = [
+  // 0001 and 0002 are the arcade's own schema. They were applied by hand to the
+  // hosted project before this API existed, so they are idempotent and carry
+  // their history in public.icon_migrations only from now on.
+  '0001_arcade_labs.sql',
+  '0002_code_escape.sql',
   '0003_icon_core.sql',
   '0004_icon_student.sql',
   '0005_icon_startup.sql',
   '0006_icon_finance.sql',
   '0007_icon_challenges.sql',
+  '0008_icon_ops.sql',
 ];
 
 /* A hosted server wins over the embedded engine. */
@@ -79,8 +85,16 @@ create table if not exists auth.users (
 );
 create or replace function auth.uid() returns uuid language sql stable as $$
   select nullif(current_setting('icon.uid', true), '')::uuid; $$;
+
+/* Supabase provides auth.jwt(); the embedded engine has to as well, because the
+   arcade's own migration reads the nickname out of it. Empty unless a test sets
+   icon.jwt, which is the same contract as a request with no token. */
+create or replace function auth.jwt() returns jsonb language sql stable as $$
+  select coalesce(nullif(current_setting('icon.jwt', true), '')::jsonb, '{}'::jsonb); $$;
+
 grant usage on schema auth to anon, authenticated, service_role;
 grant execute on function auth.uid() to anon, authenticated, service_role;
+grant execute on function auth.jwt() to anon, authenticated, service_role;
 `;
 
 const MIGRATIONS_TABLE = `

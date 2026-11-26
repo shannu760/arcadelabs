@@ -5,14 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Create your player — Student Icon</title>
 <meta name="description" content="Set up your Student Icon identity: a permanent handle, your profile, and the focus that follows you from student life into startup life.">
+<!-- si:meta -->
+<link rel="canonical" href="https://arcadelabs-eight.vercel.app/onboarding.html">
+<meta property="og:site_name" content="Student Icon">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Create your player — Student Icon">
+<meta property="og:description" content="Set up your Student Icon identity: a permanent handle, your profile, and the focus that follows you from student life into startup life.">
+<meta property="og:url" content="https://arcadelabs-eight.vercel.app/onboarding.html">
+<meta property="og:image" content="https://arcadelabs-eight.vercel.app/assets/img/og.png">
+<meta property="og:image:alt" content="Student Icon — start in a classroom, finish as an icon">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Create your player — Student Icon">
+<meta name="twitter:description" content="Set up your Student Icon identity: a permanent handle, your profile, and the focus that follows you from student life into startup life.">
+<meta name="twitter:image" content="https://arcadelabs-eight.vercel.app/assets/img/og.png">
+<!-- /si:meta -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2306050f'/%3E%3Crect x='1' y='4' width='6' height='3' fill='%23c8ff3d'/%3E%3Crect x='2' y='2' width='4' height='2' fill='%2338f2ff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./assets/css/pixel.css">
 <link rel="stylesheet" href="./assets/css/onboarding.css">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4494199135836412"
-     crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -73,6 +85,8 @@
           <p class="si-hint" id="auth-hint">Eight characters or more. Supabase Auth stores the password; this server never sees it.</p>
           <button type="button" class="si-linkbtn" id="forgot" hidden>Forgot your password?</button>
         </div>
+
+        <div id="turnstile-slot" hidden></div>
 
         <p class="si-note" id="auth-note" hidden></p>
         <p class="si-error" id="auth-error" role="alert" hidden></p>
@@ -245,5 +259,9 @@
 </footer>
 
 <script type="module" src="./assets/js/icon/onboarding.js"></script>
+<!-- si:client -->
+<script src="./assets/js/consent.js" defer></script>
+<script src="./assets/js/monitor.js" defer></script>
+<!-- /si:client -->
 </body>
 </html>

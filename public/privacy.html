@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy policy — Student Icon</title>
 <meta name="description" content="How Student Icon uses cookies, browser storage and Google AdSense, and what you can do about it.">
+<!-- si:meta -->
+<link rel="canonical" href="https://arcadelabs-eight.vercel.app/privacy.html">
+<meta property="og:site_name" content="Student Icon">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Privacy policy — Student Icon">
+<meta property="og:description" content="How Student Icon uses cookies, browser storage and Google AdSense, and what you can do about it.">
+<meta property="og:url" content="https://arcadelabs-eight.vercel.app/privacy.html">
+<meta property="og:image" content="https://arcadelabs-eight.vercel.app/assets/img/og.png">
+<meta property="og:image:alt" content="Student Icon — start in a classroom, finish as an icon">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Privacy policy — Student Icon">
+<meta name="twitter:description" content="How Student Icon uses cookies, browser storage and Google AdSense, and what you can do about it.">
+<meta name="twitter:image" content="https://arcadelabs-eight.vercel.app/assets/img/og.png">
+<!-- /si:meta -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2306050f'/%3E%3Crect x='1' y='4' width='6' height='3' fill='%23c8ff3d'/%3E%3Crect x='2' y='2' width='4' height='2' fill='%2338f2ff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,12 +87,18 @@
         <li><b>Session</b> &mdash; if you sign in, the session token is kept in local storage so you stay signed in on that device. Signing out removes it.</li>
       </ul>
       <p>Clearing site data in your browser erases both, along with your local game records.</p>
+      <p>
+        Your advertising choice is stored the same way, under <code>si.consent.v1</code>. You can change
+        it at any time:
+        <button class="btn ghost small" type="button" onclick="window.siConsent && window.siConsent.reset()">Cookie settings</button>
+      </p>
 
       <h2>Google AdSense and third-party cookies</h2>
       <p>
-        This site shows advertising through Google AdSense. Google and its partners may use cookies,
-        including the DoubleClick cookie, to serve ads based on your prior visits to this and other
-        websites, and to measure how ads perform.
+        This site can show advertising through Google AdSense. Nothing from Google is loaded until you
+        allow ads in the banner, and the choice is remembered on this device. If you allow it, Google
+        and its partners may use cookies, including the DoubleClick cookie, to serve ads based on your
+        prior visits to this and other websites, and to measure how ads perform.
       </p>
       <ul>
         <li>Google's use of advertising cookies lets it and its partners serve ads to you based on your visit to this site and others.</li>
@@ -87,8 +107,8 @@
         <li>Read <a href="https://policies.google.com/technologies/ads" rel="nofollow noopener" target="_blank">how Google uses information from sites that use its services</a>.</li>
       </ul>
       <p>
-        Visitors in the European Economic Area, the United Kingdom and Switzerland are asked for
-        consent before personalised ads are served, and can change that choice later.
+        Every visitor is asked before any advertising script loads, wherever they are. Declining keeps
+        the whole site — pages, games and accounts — working; you simply see no ads.
       </p>
 
       <h2>Accounts and profile data</h2>
@@ -96,7 +116,13 @@
         Creating a player is optional. If you do, we store the email address and profile details you
         type in (handle, display name, focus) with our authentication and database provider, Supabase,
         so you can sign in again and other players can see your public profile. We do not sell or rent
-        that data. Ask us to delete your player and we will remove the account and its profile.
+        that data.
+      </p>
+      <p>
+        You are in control of it from your profile page: <b>Download my data</b> returns a JSON file of
+        everything the API holds about you, and <b>Delete my account</b> removes your player, skills,
+        XP, projects and arcade records. You can also change the email address on the account there;
+        the change only takes effect once you follow the confirmation link sent to the new address.
       </p>
 
       <h2>Server logs</h2>
@@ -131,5 +157,9 @@
   <span>PRIVACY &middot; COOKIES &middot; ADS &middot; <a href="./index.html">HOME</a></span>
 </footer>
 
+<!-- si:client -->
+<script src="./assets/js/consent.js" defer></script>
+<script src="./assets/js/monitor.js" defer></script>
+<!-- /si:client -->
 </body>
 </html>

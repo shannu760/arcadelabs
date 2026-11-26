@@ -12,6 +12,10 @@
 */
 
 import { handleApi } from '../server/api/routes.mjs';
+import { applySecurityHeaders } from '../server/api/headers.mjs';
+import { reportError, watchProcess } from '../server/api/monitor.mjs';
+
+watchProcess();
 
 // The routes read the request body themselves; Vercel must not consume it.
 export const config = { api: { bodyParser: false } };
@@ -19,11 +23,14 @@ export const config = { api: { bodyParser: false } };
 export default async function handler(req, res) {
   const url = new URL(req.url || '/', `https://${req.headers.host || 'localhost'}`);
 
+  applySecurityHeaders(res);
+
   try {
     await handleApi(req, res, url);
   } catch (err) {
     // handleApi turns its own failures into JSON; anything reaching here is a
     // bug, and the message must not reach the client.
+    reportError(err, { source: 'vercel', route: `${req.method} ${url.pathname}` });
     if (!res.headersSent) {
       res.writeHead(500, { 'content-type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify({ error: { code: 'server_error', message: 'Server error' } }));

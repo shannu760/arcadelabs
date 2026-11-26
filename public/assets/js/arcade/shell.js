@@ -72,8 +72,10 @@ export function refreshHeader() {
   if (bar) bar.style.width = `${Math.min(100, Math.round((lvl.intoLevel / lvl.need) * 100))}%`;
 
   if (cloudEnabled()) {
-    set('[data-stat-mode]', 'CLOUD');
-    set('[data-stat-note]', 'synced');
+    // One account for both halves of the universe; signed-out play stays local.
+    const signedIn = Boolean(localStorage.getItem('si.session'));
+    set('[data-stat-mode]', signedIn ? 'ACCOUNT' : 'LOCAL MODE');
+    set('[data-stat-note]', signedIn ? 'synced' : 'this browser only');
   }
 }
 

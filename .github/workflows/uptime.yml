@@ -1,0 +1,53 @@
+name: uptime
+
+# Three jobs in one schedule:
+#   1. a smoke test of the live site, so a broken deployment is noticed without
+#      anyone opening the page;
+#   2. a keep-alive against the API, because a free Supabase project pauses
+#      after about a week without activity and that is exactly how the last
+#      outage started;
+#   3. a clear failure in the Actions tab (and an optional webhook) when either
+#      of the first two fails.
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Base URL to check
+        required: false
+        default: https://arcadelabs-eight.vercel.app
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Smoke test the live site
+        id: smoke
+        run: node scripts/smoke.mjs "${{ inputs.base_url || 'https://arcadelabs-eight.vercel.app' }}"
+
+      - name: Keep the database awake
+        if: always()
+        run: |
+          code=$(curl -s -o /tmp/health.json -w '%{http_code}' --max-time 20 \
+            "${{ inputs.base_url || 'https://arcadelabs-eight.vercel.app' }}/api/health")
+          echo "health -> $code"
+          cat /tmp/health.json || true
+          test "$code" = "200"
+
+      - name: Report the failure
+        if: failure() && env.ALERT_WEBHOOK
+        env:
+          ALERT_WEBHOOK: ${{ secrets.ALERT_WEBHOOK }}
+        run: |
+          curl -s -X POST "$ALERT_WEBHOOK" \
+            -H 'content-type: application/json' \
+            -d "{\"text\":\"Student Icon is failing its smoke test: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}"

@@ -10,7 +10,10 @@ const check = (name, pass, detail = '') => {
   console.log(`${pass ? 'PASS' : 'FAIL'}  ${name}${detail ? '  — ' + detail : ''}`);
 };
 
-const sql = await readFile('../supabase/migrations/0001_arcade_labs.sql', 'utf8');
+const sql = await readFile(
+  new URL('../supabase/migrations/0001_arcade_labs.sql', import.meta.url),
+  'utf8'
+);
 
 const stub = `
 create role anon;

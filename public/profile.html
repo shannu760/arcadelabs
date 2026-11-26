@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Player — Student Icon</title>
 <meta name="description" content="A Student Icon player profile: handle, rank, focus and the projects that follow them from student life into startup life.">
+<!-- si:meta -->
+<link rel="canonical" href="https://arcadelabs-eight.vercel.app/profile.html">
+<meta property="og:site_name" content="Student Icon">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Player — Student Icon">
+<meta property="og:description" content="A Student Icon player profile: handle, rank, focus and the projects that follow them from student life into startup life.">
+<meta property="og:url" content="https://arcadelabs-eight.vercel.app/profile.html">
+<meta property="og:image" content="https://arcadelabs-eight.vercel.app/assets/img/og.png">
+<meta property="og:image:alt" content="Student Icon — start in a classroom, finish as an icon">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Player — Student Icon">
+<meta name="twitter:description" content="A Student Icon player profile: handle, rank, focus and the projects that follow them from student life into startup life.">
+<meta name="twitter:image" content="https://arcadelabs-eight.vercel.app/assets/img/og.png">
+<!-- /si:meta -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%2306050f'/%3E%3Crect x='1' y='4' width='6' height='3' fill='%23c8ff3d'/%3E%3Crect x='2' y='2' width='4' height='2' fill='%2338f2ff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,8 +26,6 @@
 <link rel="stylesheet" href="./assets/css/pixel.css">
 <link rel="stylesheet" href="./assets/css/onboarding.css">
 <link rel="stylesheet" href="./assets/css/profile.css">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4494199135836412"
-     crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -144,6 +156,16 @@
       </div>
 
       <div class="si-field">
+        <label>Interests <em class="si-optional">optional · up to 12</em></label>
+        <div class="si-chips" id="edit-interests"></div>
+      </div>
+
+      <div class="si-field">
+        <label>Career paths <em class="si-optional">optional · up to 12</em></label>
+        <div class="si-chips" id="edit-careers"></div>
+      </div>
+
+      <div class="si-field">
         <label for="edit-visibility">Visibility</label>
         <select id="edit-visibility">
           <option value="public">Public — anyone with your handle can find you</option>
@@ -160,6 +182,97 @@
       </div>
     </form>
 
+    <section class="si-panel si-edit" id="projects-panel">
+      <h2 class="si-panel-title">Projects</h2>
+      <p class="si-panel-lede" id="projects-lede">
+        What you have shipped. Public projects appear here for anyone who visits your profile.
+      </p>
+
+      <div class="si-projects" id="p-projects">
+        <p class="si-hint" id="projects-empty">No projects yet.</p>
+      </div>
+
+      <p class="si-error" id="project-error" role="alert" hidden></p>
+
+      <button class="btn ghost small" type="button" id="add-project" hidden>Add a project</button>
+
+      <form id="project-form" hidden novalidate>
+        <div class="si-field">
+          <label for="project-title">Title</label>
+          <input id="project-title" type="text" maxlength="80" placeholder="What did you build?" required>
+        </div>
+
+        <div class="si-field">
+          <label for="project-summary">One-line summary <em class="si-optional">optional</em></label>
+          <input id="project-summary" type="text" maxlength="400" placeholder="What it does, in a sentence">
+        </div>
+
+        <div class="si-grid2">
+          <div class="si-field">
+            <label for="project-category">Category</label>
+            <select id="project-category">
+              <option value="software">Software</option>
+              <option value="ai">AI</option>
+              <option value="research">Research</option>
+              <option value="creative">Creative</option>
+              <option value="business">Business</option>
+              <option value="community">Community</option>
+            </select>
+          </div>
+
+          <div class="si-field">
+            <label for="project-status">Visibility</label>
+            <select id="project-status">
+              <option value="published">Published — visible to everyone</option>
+              <option value="draft">Draft — only you</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="si-field">
+          <label for="project-link">Link <em class="si-optional">optional</em></label>
+          <input id="project-link" type="url" placeholder="https://…">
+        </div>
+
+        <div class="si-actions">
+          <button class="btn" type="submit" id="project-save">Add project</button>
+          <button class="btn ghost" type="button" id="project-cancel">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="si-panel si-edit" id="account-panel" hidden>
+      <h2 class="si-panel-title">Account</h2>
+      <p class="si-panel-lede">Your data, and the door out. Your handle stays reserved while the account exists.</p>
+
+      <div class="si-field">
+        <label>Export</label>
+        <p class="si-hint">A JSON file with your profile, interests, skills, attempts and projects.</p>
+        <button class="btn ghost small" type="button" id="export-data">Download my data</button>
+      </div>
+
+      <form id="email-form" novalidate>
+        <div class="si-field">
+          <label for="email-new">Change email</label>
+          <input id="email-new" type="email" maxlength="254" placeholder="new@example.com" autocomplete="email">
+          <p class="si-hint">A confirmation link goes to the new address; nothing changes until you follow it.</p>
+        </div>
+        <div class="si-actions">
+          <button class="btn ghost small" type="submit" id="email-save">Send confirmation</button>
+        </div>
+      </form>
+
+      <p class="si-note" id="account-note" hidden></p>
+      <p class="si-error" id="account-error" role="alert" hidden></p>
+
+      <div class="si-field">
+        <label for="delete-confirm">Delete account</label>
+        <p class="si-hint">Removes your player, skills, XP, projects and arcade records. This cannot be undone. Type <b>delete</b> to confirm.</p>
+        <input id="delete-confirm" type="text" autocomplete="off" placeholder="delete">
+        <button class="btn ghost small" type="button" id="delete-account">Delete my account</button>
+      </div>
+    </section>
+
   </section>
 </main>
 
@@ -171,5 +284,9 @@
 
 <script type="module" src="./assets/js/icon/auth-layer.js"></script>
 <script type="module" src="./assets/js/icon/profile.js"></script>
+<!-- si:client -->
+<script src="./assets/js/consent.js" defer></script>
+<script src="./assets/js/monitor.js" defer></script>
+<!-- /si:client -->
 </body>
 </html>

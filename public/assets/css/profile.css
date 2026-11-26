@@ -95,6 +95,47 @@
 
 .si-chip.is-static:hover { transform: none; }
 
+.si-chip.is-on {
+  border-color: var(--lime);
+  background: rgba(200, 255, 61, 0.12);
+  color: var(--lime);
+}
+
+/* ------------------------------------------------------------- projects */
+
+.si-projects {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.si-project {
+  padding: 16px;
+  border: 2px solid var(--line-2);
+  background: rgba(6, 5, 15, 0.6);
+}
+
+.si-project h3 {
+  margin: 0 0 6px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.si-project p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.si-project a {
+  display: inline-block;
+  margin-right: 12px;
+  margin-bottom: 8px;
+  color: var(--cyan);
+}
+
 .si-pcard-actions {
   display: flex;
   flex-wrap: wrap;

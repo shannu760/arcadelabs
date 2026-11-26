@@ -4,6 +4,10 @@ import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 import { handleApi } from './server/api/routes.mjs';
 import { authMode } from './server/api/auth.mjs';
+import { applySecurityHeaders } from './server/api/headers.mjs';
+import { reportError, watchProcess } from './server/api/monitor.mjs';
+
+watchProcess();
 
 const root = resolve(process.argv[2] || 'public');
 const port = Number(process.env.PORT) || 8080;
@@ -39,6 +43,9 @@ function legacyRedirect(pathname) {
 }
 
 const server = createServer(async (req, res) => {
+  // Same policy the host applies in production, so a local check means something.
+  applySecurityHeaders(res);
+
   try {
     const url = new URL(req.url || '/', `http://127.0.0.1:${port}`);
     let pathname = decodeURIComponent(url.pathname);
@@ -83,7 +90,8 @@ const server = createServer(async (req, res) => {
       'cache-control': 'no-store',
     });
     res.end(body);
-  } catch {
+  } catch (err) {
+    reportError(err, { source: 'server' });
     res.writeHead(500, { 'content-type': 'text/plain; charset=utf-8' });
     res.end('Server error');
   }

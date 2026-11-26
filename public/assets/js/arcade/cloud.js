@@ -1,167 +1,130 @@
-/* ARCADE LABS — Supabase bridge.
+/* ARCADE — the same account as the rest of Student Icon.
 
-   Loaded lazily: nothing is fetched while config.js is blank, so local mode
-   costs zero network and zero dependencies. When configured, every reward is
-   recomputed inside Postgres (see supabase/migrations) and the client only
-   submits raw session facts. The browser never decides XP or K-Points. */
+   This used to be a second identity system: a Supabase client in the browser
+   with its own copied anon key and a free-text nickname, so an arcade "account"
+   was not the player account at all. It now delegates to the same-origin
+   /api/arcade/* and /api/auth/* routes, so one sign-in covers both halves of
+   the universe and the reward maths still runs inside Postgres.
 
-import { SUPABASE, isConfigured } from './config.js';
+   Local mode remains the fallback: with no session, or no API answering, every
+   game still plays and records stay in this browser (store.js).
+*/
 
-const CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { loadSession, saveSession, ensureFresh, signOutRequest } from '../icon/session.js';
 
-let clientPromise = null;
-
+/* True when the arcade can reach an account. The header says ACCOUNT when a
+   session exists and LOCAL MODE when it does not; both are normal. */
 export function cloudEnabled() {
-  return isConfigured();
+  return true;
 }
 
-export function getClient() {
-  if (!cloudEnabled()) return Promise.resolve(null);
-  if (!clientPromise) {
-    clientPromise = import(CDN)
-      .then(({ createClient }) =>
-        createClient(SUPABASE.url.trim(), SUPABASE.anonKey.trim(), {
-          auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
-        }),
-      )
-      .catch((err) => {
-        console.warn('[arcade] Supabase SDK failed to load:', err);
-        return null;
-      });
+async function request(path, { method = 'GET', body } = {}) {
+  const session = await ensureFresh(loadSession());
+  const headers = {};
+  if (body !== undefined) headers['content-type'] = 'application/json';
+  if (session?.accessToken) headers.authorization = `Bearer ${session.accessToken}`;
+
+  let res;
+  try {
+    res = await fetch(path, {
+      method,
+      headers,
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  } catch (err) {
+    return { status: 0, data: null, error: err };
   }
-  return clientPromise;
+
+  const data = await res.json().catch(() => null);
+  return { status: res.status, data };
 }
 
 export async function currentUser() {
-  const sb = await getClient();
-  if (!sb) return null;
-  const { data } = await sb.auth.getUser();
-  return data?.user ?? null;
+  const session = await ensureFresh(loadSession());
+  if (!session?.accessToken) return null;
+
+  const me = await request('/api/me');
+  if (me.status === 401) return null;
+  // 200 signed in with a player, 404 signed in without one: both are accounts.
+  if (me.status !== 200 && me.status !== 404) return null;
+
+  return session.user || { id: null, email: null };
 }
 
 export async function signUp(email, password, nickname) {
-  const sb = await getClient();
-  if (!sb) return { ok: false, reason: 'Cloud mode is not configured.' };
-  const { data, error } = await sb.auth.signUp({
-    email,
-    password,
-    options: { data: { nickname } },
-  });
-  if (error) return { ok: false, reason: error.message };
-  return { ok: true, user: data.user, needsConfirm: !data.session };
+  const res = await fetch('/api/auth/signup', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  }).catch(() => null);
+
+  if (!res) return { ok: false, reason: 'The API is not reachable.' };
+  const data = await res.json().catch(() => null);
+  if (!res.ok) return { ok: false, reason: data?.error?.message || 'Could not create the account' };
+
+  if (data?.session) saveSession(data.session);
+  else request('/api/session/sync', { method: 'POST', body: { handle: nickname, displayName: nickname } });
+
+  return { ok: true, user: data?.user || null, needsConfirm: !data?.session };
 }
 
 export async function signIn(email, password) {
-  const sb = await getClient();
-  if (!sb) return { ok: false, reason: 'Cloud mode is not configured.' };
-  const { data, error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) return { ok: false, reason: error.message };
-  return { ok: true, user: data.user };
+  const res = await fetch('/api/auth/signin', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  }).catch(() => null);
+
+  if (!res) return { ok: false, reason: 'The API is not reachable.' };
+  const data = await res.json().catch(() => null);
+  if (!res.ok || !data?.session) {
+    return { ok: false, reason: data?.error?.message || 'Could not sign in' };
+  }
+
+  saveSession(data.session);
+  return { ok: true, user: data.session.user };
 }
 
 export async function signOut() {
-  const sb = await getClient();
-  if (sb) await sb.auth.signOut();
+  await signOutRequest();
 }
 
 export async function fetchProfile() {
-  const sb = await getClient();
-  if (!sb) return null;
-  const { data, error } = await sb.from('arcade_profiles').select('*').maybeSingle();
-  if (error) {
-    console.warn('[arcade] profile fetch failed:', error.message);
-    return null;
-  }
-  return data;
+  const { status, data } = await request('/api/arcade/profile');
+  return status === 200 ? data?.profile || null : null;
 }
 
 /**
- * Send a finished session to Postgres for verification and rewards.
+ * Send a finished session to the server for verification and rewards.
  * `payload` carries raw facts only; the database owns the math.
  */
 export async function submitSession(slug, payload, clientId) {
-  const sb = await getClient();
-  if (!sb) return null;
-  const { data, error } = await sb.rpc('arcade_complete_session', {
-    p_game_slug: slug,
-    p_payload: payload,
-    p_client_id: clientId,
+  const { status, data } = await request('/api/arcade/sessions', {
+    method: 'POST',
+    body: { game: slug, payload, clientId },
   });
-  if (error) {
-    console.warn('[arcade] session rejected by server:', error.message);
-    return { ok: false, reason: error.message };
+
+  if (status !== 200) {
+    console.warn('[arcade] session rejected by server:', data?.error?.message || status);
+    return { ok: false, reason: data?.error?.message || `HTTP ${status}` };
   }
-  return { ok: true, result: data };
+  return { ok: true, result: data?.result || null };
 }
 
-/* Code Escape: read the published challenge bank from Postgres. Returns null
-   when cloud mode is off or the table has not been migrated yet, so callers
-   can fall back to the bundled bank. */
+/* Code Escape: read the published challenge bank from the server. Returns null
+   when the API is unavailable, so callers fall back to the bundled bank. */
 export async function fetchCodeChallenges() {
-  const sb = await getClient();
-  if (!sb) return null;
-  const { data, error } = await sb
-    .from('arcade_code_challenges')
-    .select('slug, level, difficulty, language, kind, title, prompt, code, options, answer, explain, source')
-    .eq('is_active', true)
-    .order('level', { ascending: true });
-  if (error) {
-    console.warn('[arcade] challenge bank unavailable:', error.message);
-    return null;
-  }
-  return data || [];
+  const { status, data } = await request('/api/arcade/challenges');
+  if (status !== 200 || !Array.isArray(data?.challenges)) return null;
+  return data.challenges;
 }
 
 /** Persist solved challenges and return the server-computed unlock level. */
 export async function syncCodeSolves(slugs) {
-  const sb = await getClient();
-  if (!sb || !slugs?.length) return null;
-  const { data, error } = await sb.rpc('arcade_code_solve', { p_slugs: slugs });
-  if (error) {
-    console.warn('[arcade] code progress not synced:', error.message);
-    return null;
-  }
-  return data;
-}
-
-export async function fetchCodeProgress() {
-  const sb = await getClient();
-  if (!sb) return null;
-  const { data, error } = await sb.rpc('arcade_code_progress');
-  if (error) {
-    console.warn('[arcade] code progress unavailable:', error.message);
-    return null;
-  }
-  return data;
-}
-
-export async function fetchLeaderboard(kind, { gameSlug = null, limit = 25, offset = 0 } = {}) {
-  const sb = await getClient();
-  if (!sb) return [];
-  const { data, error } = await sb.rpc('arcade_leaderboard', {
-    p_kind: kind,
-    p_game: gameSlug,
-    p_limit: limit,
-    p_offset: offset,
+  if (!slugs?.length) return null;
+  const { status, data } = await request('/api/arcade/code-solves', {
+    method: 'POST',
+    body: { slugs },
   });
-  if (error) {
-    console.warn('[arcade] leaderboard failed:', error.message);
-    return [];
-  }
-  return data || [];
-}
-
-export async function claimShopItem(itemId) {
-  const sb = await getClient();
-  if (!sb) return { ok: false, reason: 'Cloud mode is not configured.' };
-  const { data, error } = await sb.rpc('arcade_purchase', { p_item: itemId });
-  if (error) return { ok: false, reason: error.message };
-  return { ok: true, ...data };
-}
-
-export async function onAuthChange(cb) {
-  const sb = await getClient();
-  if (!sb) return () => {};
-  const { data } = sb.auth.onAuthStateChange((_event, session) => cb(session?.user ?? null));
-  return () => data.subscription.unsubscribe();
+  return status === 200 ? data?.result || null : null;
 }
