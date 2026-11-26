@@ -5,9 +5,10 @@
    only to our own API — never to Supabase directly, and never through a
    service-role key.
 
-   It creates one real account at verify.<timestamp>@student-icon.test — a
+   It creates one real account at verify.<timestamp>@example.com — a reserved
    domain that cannot receive mail, so the account is inert unless you confirm
-   it manually. Nothing is deleted afterwards: without a service-role key this
+   it manually. GoTrue rejects .test addresses as invalid, so the default has
+   to be a domain it accepts; VERIFY_EMAIL_DOMAIN overrides it. Nothing is deleted afterwards: without a service-role key this
    project cannot delete auth users, so the test account stays until you remove
    it in the Supabase dashboard.
 
@@ -83,7 +84,8 @@ function escalate(label, status, data) {
 
 async function main() {
   const stamp = Date.now();
-  const email = process.env.VERIFY_EMAIL || `verify.${stamp}@student-icon.test`;
+  const domain = process.env.VERIFY_EMAIL_DOMAIN || 'example.com';
+  const email = process.env.VERIFY_EMAIL || `verify.${stamp}@${domain}`;
   const password = process.env.VERIFY_PASSWORD || `Si-${stamp}-aA1`;
 
   // 1. The server must be in Supabase mode at all.
@@ -103,7 +105,7 @@ async function main() {
   //    it creates nothing.
   const bogus = await call('/api/auth/signin', {
     method: 'POST',
-    body: { email: `no.such.player.${stamp}@student-icon.test`, password: 'not-the-password' },
+    body: { email: `no.such.player.${stamp}@${domain}`, password: 'not-the-password' },
   });
   record(bogus.status === 401, 'wrong credentials rejected (reached the project)', `HTTP ${bogus.status}`);
   if (bogus.status === 502) escalate('sign-in network path', bogus.status, bogus.data);
