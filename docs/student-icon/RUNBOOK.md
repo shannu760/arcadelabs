@@ -27,6 +27,46 @@ Use the **session pooler** URI for `SUPABASE_DB_URL`
 host is IPv6-only on new projects, and the migration advisory lock needs a
 session-mode connection.
 
+### Replacing a deleted project
+
+The previous project (`kxflktuqgmhrqjbrjzng`) no longer resolves — `NXDOMAIN`, so
+it was deleted rather than paused. Nothing in the repository has to change; only
+three values are new.
+
+1. **Create it.** [supabase.com/dashboard](https://supabase.com/dashboard) →
+   **New project**. Name it `student-icon`, choose the closest region, and
+   generate the database password. Copy that password somewhere safe now: the
+   dashboard will not show it again, and `SUPABASE_DB_URL` needs it.
+2. **Copy two public values.** Open the project's **Connect** dialog: it shows
+   the project URL and the publishable key. (All keys, legacy and current, are
+   under **Settings → API Keys**; there is no separate Settings → API page any
+   more.)
+3. **Copy the database string.** **Connect** → **Connection string** → **Session
+   pooler** → URI. Replace `[YOUR-PASSWORD]`, percent-encoding `&`, `#`, `?` and
+   spaces.
+4. **Decide on email confirmation.** **Authentication → Providers → Email**.
+   With confirmation on, sign-up returns `needsConfirmation`, sign-in fails until
+   the link is clicked, and `npm run verify:live` exits `2`. The built-in mailer
+   also sends only a few messages an hour, so repeated test sign-ups hit a limit
+   that looks like a bug.
+5. **Point the auth links at the site.** **Authentication → URL Configuration**:
+   Site URL `https://arcadelabs-eight.vercel.app`, and add that origin to the
+   redirect allow list. Otherwise confirmation and recovery links go to
+   `localhost`.
+6. **Fill `.env`** (three lines, never committed): `SUPABASE_URL`,
+   `SUPABASE_ANON_KEY` (the `sb_publishable_…` key or the legacy anon JWT — the
+   code accepts either), `SUPABASE_DB_URL`.
+7. **Verify locally** — `npm run check:auth`, `npm run test:pg -- --write`,
+   `npm run dev` + `/api/health`, `npm run verify:live`, `npm run smoke
+   http://127.0.0.1:8080`. Only then set the same values in Vercel
+   (**Settings → Environment Variables**, all three environments) and redeploy;
+   variables are read at boot, so an existing deployment keeps its old ones.
+
+Optional fourth value: `SUPABASE_SERVICE_ROLE_KEY` (the `sb_secret_…` key or the
+legacy service_role JWT). It is read only by account deletion, to remove the
+Supabase Auth user after the player's rows are gone. Without it, deletion still
+removes everything this project owns and says the email account was left behind.
+
 ---
 
 ## 2. Deploy checklist
@@ -35,7 +75,7 @@ session-mode connection.
 2. `npm run test:pg` against the hosted database (see §6).
 3. `npm run backup` before a deploy that includes a migration.
 4. Deploy.
-5. `npm run smoke` — 11 checks; it must print `11/11 checks passed`.
+5. `npm run smoke` — 13 checks; it must print `13/13 checks passed`.
 6. Open `/onboarding.html` and confirm the wizard reaches step 01 (not the
    "player database is not connected" panel).
 7. Sign in once with a real account and confirm `/api/me` answers `200`.
