@@ -160,7 +160,16 @@ async function bootPostgres() {
     ssl: /sslmode=disable/.test(CONNECTION) ? false : { rejectUnauthorized: false },
   });
 
-  const client = await pool.connect();
+  /* A wrong host, a wrong password or a paused project must not look like a bug
+     in the site. Each of these gets a message that names what to check, and
+     never the connection string itself. */
+  let client;
+  try {
+    client = await pool.connect();
+  } catch (err) {
+    throw connectionProblem(err);
+  }
+
   try {
     await client.query('select pg_advisory_lock($1)', [LOCK_KEY]);
 
@@ -184,6 +193,28 @@ async function bootPostgres() {
   }
 
   return pgDb(pool);
+}
+
+const CONNECT_REASONS = {
+  ENOTFOUND: 'that host does not exist (check the project reference)',
+  EAI_AGAIN: 'DNS could not resolve that host',
+  ECONNREFUSED: 'the host refused the connection on that port',
+  ECONNRESET: 'the connection was reset before it opened',
+  EHOSTUNREACH: 'the host is unreachable',
+  ENETUNREACH: 'the network is unreachable (the direct host is IPv6-only)',
+  ETIMEDOUT: 'the connection timed out',
+  '28P01': 'the password in the connection string was refused',
+  '28000': 'the connection was not allowed to authenticate',
+  '3D000': 'that database name does not exist',
+};
+
+function connectionProblem(err) {
+  const reason = CONNECT_REASONS[err?.code] || 'the connection failed';
+  return new HttpError(
+    503,
+    'db_unreachable',
+    `The configured Postgres is not answering: ${reason}. Check SUPABASE_DB_URL.`
+  );
 }
 
 /* The routes only ever use query(), exec() and transaction(); this is that

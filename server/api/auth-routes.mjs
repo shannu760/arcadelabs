@@ -113,6 +113,10 @@ export async function handleAuth(req, res, url, method, path) {
       reachable: probe.reachable,
       authHost: probe.host || null,
       authDetail: probe.detail,
+      /* Which build is serving this request. Vercel sets the commit for a git
+         deployment; 'dev' locally. Without it, "did my change deploy?" and
+         "did my environment change?" look identical from the outside. */
+      build: String(process.env.VERCEL_GIT_COMMIT_SHA || '').slice(0, 7) || 'dev',
     });
   }
 
