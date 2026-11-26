@@ -67,8 +67,11 @@ export async function throttle(key, max, windowMs) {
     await sharedThrottle(key, max, windowMs);
     return;
   } catch (err) {
-    if (err instanceof HttpError) throw err;
-    // No database (or no migration yet): keep protecting this process.
+    // Only a real rate-limit refusal is fatal. Any other HttpError here is the
+    // database answering "not configured" (503) or a query failing, and that
+    // must fall back to memory — otherwise a deployment without a database
+    // refuses every sign-in with a misleading 503.
+    if (err instanceof HttpError && err.status === 429) throw err;
     console.warn(`[throttle] shared counter unavailable, using memory: ${err.message}`);
     memoryThrottle(key, max, windowMs);
   }

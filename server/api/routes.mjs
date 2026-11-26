@@ -175,9 +175,11 @@ export async function handleApi(req, res, url) {
       return send(res, 202, { ok: true });
     }
 
-    const db = await getDb();
-
+    /* Identity first: an unauthenticated request is refused as 401 even when
+       the database is missing, so "sign in to continue" stays true instead of
+       being masked by a storage error. */
     const session = await authenticate(req);
+    const db = await getDb();
 
     if (path === '/api/health' && method === 'GET') {
       const { rows } = await db.query(`

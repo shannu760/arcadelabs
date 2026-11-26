@@ -15,7 +15,7 @@ const base = (process.argv[2] || process.env.BASE_URL || 'https://arcadelabs-eig
 
 const results = [];
 
-async function check(name, path, test) {
+async function check(name, path, test, options = {}) {
   const started = Date.now();
   let res = null;
   let body = '';
@@ -23,8 +23,13 @@ async function check(name, path, test) {
 
   try {
     res = await fetch(base + path, {
+      method: options.method || 'GET',
       redirect: 'manual',
-      headers: { 'user-agent': 'student-icon-smoke/1.0' },
+      headers: {
+        'user-agent': 'student-icon-smoke/1.0',
+        ...(options.body ? { 'content-type': 'application/json' } : {}),
+      },
+      body: options.body ? JSON.stringify(options.body) : undefined,
       signal: AbortSignal.timeout(15000),
     });
     body = await res.text();
@@ -118,6 +123,23 @@ await check('signed-out guard', '/api/me', (res) => ({
   ok: res.status === 401,
   detail: `HTTP ${res.status}`,
 }));
+
+/* A deployment with no database still has to be able to say "wrong password"
+   rather than "storage missing" — that regression shipped once. Any answer but
+   db_not_configured is fine here: 401 wrong credentials, 429 throttled, 502
+   auth host unreachable. */
+await check(
+  'sign-in is not blocked by storage',
+  '/api/auth/signin',
+  (res, body) => {
+    const code = json(res, body)?.error?.code || '';
+    return {
+      ok: !(res.status === 503 && code === 'db_not_configured'),
+      detail: `HTTP ${res.status}${code ? ' ' + code : ''}`,
+    };
+  },
+  { method: 'POST', body: { email: 'smoke-probe@example.com', password: 'not-a-real-password' } }
+);
 
 /* Unknown API paths answer 404 to a signed-in caller and 401 to anyone else:
    the session guard runs before the route table. Either is a healthy answer. */

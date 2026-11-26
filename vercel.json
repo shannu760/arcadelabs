@@ -23,6 +23,13 @@
       ]
     }
   ],
+  "redirects": [
+    { "source": "/memory.html", "destination": "/arcade/memory.html", "permanent": true },
+    { "source": "/race.html", "destination": "/arcade/race.html", "permanent": true },
+    { "source": "/chess.html", "destination": "/arcade/chess.html", "permanent": true },
+    { "source": "/labs.html", "destination": "/arcade/labs.html", "permanent": true },
+    { "source": "/labs/:path*", "destination": "/arcade/labs/:path*", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/index" },
     { "source": "/api", "destination": "/api/index" },
