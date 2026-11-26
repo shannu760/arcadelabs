@@ -449,6 +449,32 @@ body.si-layer-open { overflow: hidden; }
   max-width: 44ch;
 }
 
+.si-layer-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+
+.si-layer-tab {
+  padding: 8px 12px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  background: var(--ink-2);
+  border: 3px solid var(--line-2);
+  cursor: pointer;
+}
+
+.si-layer-tab:hover { color: var(--text); }
+
+.si-layer-tab.is-active {
+  background: var(--cyan);
+  color: #0a0a12;
+  border-color: #000;
+}
+
 .si-layer .si-field {
   display: flex;
   flex-direction: column;

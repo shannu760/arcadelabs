@@ -16,7 +16,22 @@ import { isLocalHost } from './api-status.js';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MIN_PASSWORD = 8;
 
-const state = { mode: null, busy: false, lastFocus: null };
+const TAB_COPY = {
+  signin: {
+    title: 'Sign in',
+    lede: 'Your player follows the account, on any device.',
+    submit: 'Sign in',
+    foot: 'New here? <button type="button" class="si-linkbtn" data-authswitch="signup">Create account</button>',
+  },
+  signup: {
+    title: 'Create account',
+    lede: 'A real account, so your player survives this device.',
+    submit: 'Create account',
+    foot: 'Already have an account? <button type="button" class="si-linkbtn" data-authswitch="signin">Sign in</button>',
+  },
+};
+
+const state = { mode: null, busy: false, lastFocus: null, tab: 'signin' };
 
 const el = (id) => document.getElementById(id);
 
@@ -57,6 +72,11 @@ function mountLayer() {
       <h2 class="si-layer-title" id="si-auth-title">Sign in</h2>
       <p class="si-layer-lede" id="si-auth-lede">Your player follows the account, on any device.</p>
 
+      <div class="si-layer-tabs" id="si-auth-tabs" role="tablist" aria-label="Account mode">
+        <button type="button" class="si-layer-tab is-active" role="tab" aria-selected="true" data-authmode="signin">Sign in</button>
+        <button type="button" class="si-layer-tab" role="tab" aria-selected="false" data-authmode="signup">Create account</button>
+      </div>
+
       <form id="si-auth-form" novalidate hidden>
         <div class="si-field">
           <label for="si-auth-email">Email</label>
@@ -81,6 +101,12 @@ function mountLayer() {
 
   el('si-auth-close').addEventListener('click', closeLayer);
   el('si-auth-form').addEventListener('submit', submit);
+  layer.addEventListener('click', (event) => {
+    const tab = event.target.closest('[data-authmode]');
+    if (tab) setTab(tab.dataset.authmode);
+    const swap = event.target.closest('[data-authswitch]');
+    if (swap) setTab(swap.dataset.authswitch);
+  });
   layer.addEventListener('mousedown', (event) => {
     if (event.target === layer) closeLayer();
   });
@@ -124,22 +150,38 @@ function setNote(message) {
   node.hidden = !message;
 }
 
+function setTab(tab) {
+  state.tab = tab === 'signup' ? 'signup' : 'signin';
+  const copy = TAB_COPY[state.tab];
+
+  document.querySelectorAll('[data-authmode]').forEach((button) => {
+    const active = button.dataset.authmode === state.tab;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-selected', String(active));
+  });
+
+  el('si-auth-title').textContent = copy.title;
+  el('si-auth-lede').textContent = copy.lede;
+  el('si-auth-password').autocomplete = state.tab === 'signup' ? 'new-password' : 'current-password';
+  el('si-auth-submit').textContent = copy.submit;
+  el('si-auth-foot').hidden = false;
+  el('si-auth-foot').innerHTML = copy.foot;
+  setError('');
+}
+
 function reset() {
   state.mode = null;
   state.busy = false;
   el('si-auth-form').hidden = true;
   el('si-auth-password').value = '';
+  el('si-auth-tabs').hidden = false;
   el('si-auth-submit').disabled = false;
-  el('si-auth-submit').textContent = 'Sign in';
-  el('si-auth-title').textContent = 'Sign in';
-  el('si-auth-lede').textContent = 'Your player follows the account, on any device.';
-  el('si-auth-foot').hidden = false;
-  el('si-auth-foot').innerHTML = 'New here? <a href="./onboarding.html">Create your player</a>';
-  setError('');
+  setTab('signin');
   setNote('');
 }
 
 function showForm() {
+  el('si-auth-tabs').hidden = false;
   el('si-auth-form').hidden = false;
   el('si-auth-submit').disabled = true;
   el('si-auth-submit').textContent = 'Checking…';
@@ -147,10 +189,11 @@ function showForm() {
 
 function enableForm() {
   el('si-auth-submit').disabled = false;
-  el('si-auth-submit').textContent = 'Sign in';
+  el('si-auth-submit').textContent = TAB_COPY[state.tab].submit;
 }
 
 function lock(title, message, action) {
+  el('si-auth-tabs').hidden = true;
   el('si-auth-form').hidden = true;
   el('si-auth-title').textContent = title;
   el('si-auth-lede').textContent = message;
@@ -161,6 +204,7 @@ function lock(title, message, action) {
 function showSignedIn() {
   const session = loadSession();
   const label = session?.user?.email || 'this device';
+  el('si-auth-tabs').hidden = true;
   el('si-auth-form').hidden = true;
   el('si-auth-title').textContent = 'Signed in';
   el('si-auth-lede').textContent = `You are signed in as ${label}.`;
@@ -263,6 +307,7 @@ async function submit(event) {
 
   const email = el('si-auth-email').value.trim().toLowerCase();
   const password = el('si-auth-password').value;
+  const signup = state.tab === 'signup';
 
   if (!EMAIL_RE.test(email)) {
     setError('Enter a valid email address.');
@@ -278,16 +323,20 @@ async function submit(event) {
   const button = el('si-auth-submit');
   state.busy = true;
   button.disabled = true;
-  button.textContent = 'Signing in…';
+  button.textContent = signup ? 'Creating…' : 'Signing in…';
   setError('');
   setNote('');
 
   let res = null;
   try {
-    res = await fetch('/api/auth/signin', {
+    res = await fetch(signup ? '/api/auth/signup' : '/api/auth/signin', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({
+        email,
+        password,
+        turnstileToken: window.turnstile?.getResponse?.() || undefined,
+      }),
     });
   } catch {
     res = null;
@@ -295,7 +344,7 @@ async function submit(event) {
 
   state.busy = false;
   button.disabled = false;
-  button.textContent = 'Sign in';
+  setTab(state.tab);
 
   if (!res) {
     setError(
@@ -307,6 +356,13 @@ async function submit(event) {
   }
 
   const data = await res.json().catch(() => null);
+
+  if (signup && res.ok && data?.needsConfirmation) {
+    setTab('signin');
+    setNote(`Confirm your email to finish. We sent a link to ${email}; once it is confirmed, sign in here.`);
+    el('si-auth-password').value = '';
+    return;
+  }
 
   if (res.ok && data?.session) {
     saveSession(data.session);
@@ -321,7 +377,10 @@ async function submit(event) {
     return;
   }
 
-  setError(data?.error?.message || `Could not sign in (HTTP ${res.status}).`);
+  setError(
+    data?.error?.message ||
+      (signup ? `Could not create the account (HTTP ${res.status}).` : `Could not sign in (HTTP ${res.status}).`)
+  );
 }
 
 mountTrigger();

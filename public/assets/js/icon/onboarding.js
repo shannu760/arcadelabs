@@ -376,6 +376,15 @@ async function enterUniverse() {
     return;
   }
 
+  if (status === 503 && data?.error?.code === 'db_not_configured') {
+    lock(
+      'Your account is ready. The player database is not connected, so your player cannot be loaded or saved yet. Nothing is wrong with your account — the arcade and the pages still work.',
+      'The player database is not connected',
+      'Accounts are connected; the player database is not.'
+    );
+    return;
+  }
+
   go(1);
 }
 
@@ -666,8 +675,12 @@ async function init() {
   /* Both services can be down at once, and the panel must not promise accounts
      that are not there. reachable === false means the auth host did not answer. */
   const authDown = configMode === 'supabase' && config?.data?.reachable === false;
+  /* An account is created by the auth service alone, so a missing player
+     database must not hide the sign-up form. Locking the whole page here meant
+     the live site offered sign-in only. */
+  const accountsOnly = dbMissing && !authDown && configMode === 'supabase';
 
-  if (!state.health?.ok) {
+  if (!state.health?.ok && !accountsOnly) {
     // A static host has no /api at all, so this is expected there — it is not a
     // visitor's mistake and not something they can fix by running a command.
     if (dbMissing) {
@@ -698,12 +711,18 @@ async function init() {
     state.mode = 'supabase';
     el('stepmark-account').hidden = false;
     el('signout').hidden = false;
-    el('mode-note').textContent =
-      'Accounts are live. Your player is attached to this email and follows you to any device.';
+    el('mode-note').textContent = dbMissing
+      ? 'Accounts are live; the player database is not connected yet.'
+      : 'Accounts are live. Your player is attached to this email and follows you to any device.';
 
     const arrival = captureUrlSession();
     if (arrival?.error) setError(el('auth-error'), arrival.error);
     if (arrival?.notice) setNote(arrival.notice);
+    if (dbMissing && !arrival?.notice) {
+      setNote(
+        'You can create an account or sign in now. The player database is not connected yet, so a new player cannot be saved until it is.'
+      );
+    }
 
     mountTurnstile(config?.data?.turnstileSiteKey);
 
