@@ -29,6 +29,26 @@ import {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MIN_PASSWORD = 8;
 
+/* Account emails go out through Supabase's own mailer, which allows only a few
+   an hour. When that runs out the provider answers 429, and its string ("email
+   rate limit exceeded") reads like a bug in the site. It is not: it is an email
+   limit, the wait is the fix, and the two forms must say exactly that. */
+const EMAIL_LIMIT_CODES = new Set(['over_email_send_rate_limit', 'email_send_rate_limit']);
+
+function isEmailLimit(status, data) {
+  if (status !== 429) return false;
+  const code = String(data?.error_code || data?.error || '');
+  if (EMAIL_LIMIT_CODES.has(code)) return true;
+  const message = supabaseMessage(data);
+  return /email/i.test(message) && /rate limit/i.test(message);
+}
+
+const EMAIL_LIMIT_SIGNUP =
+  'The site has reached its hourly limit for sending confirmation emails, so a new account cannot be created right now. Try again in about an hour. If you already have an account, sign in instead.';
+
+const EMAIL_LIMIT_SIGNIN =
+  'The site has reached its hourly limit for sending account emails, so this sign-in cannot be finished right now. Try again in about an hour.';
+
 /* ------------------------------------------------------------- turnstile */
 
 const turnstileSecret = () => String(process.env.TURNSTILE_SECRET_KEY || '').trim();
@@ -84,6 +104,7 @@ const requireSupabase = () => {
 /* Maps a failed GoTrue sign-in to a message a person can act on. */
 function signinFailure(status, data) {
   const code = String(data?.error_code || data?.error || '');
+  if (isEmailLimit(status, data)) return new HttpError(429, 'email_rate_limited', EMAIL_LIMIT_SIGNIN);
   if (status === 429) return new HttpError(429, 'rate_limited', 'Too many attempts. Try again shortly.');
   if (code === 'email_not_confirmed') {
     return new HttpError(403, 'email_unconfirmed', 'Confirm your email address first, then sign in.');
@@ -136,6 +157,9 @@ export async function handleAuth(req, res, url, method, path) {
       const code = String(data?.error_code || '');
       if (code === 'user_already_exists' || /already registered/i.test(supabaseMessage(data))) {
         return fail(res, 409, 'email_taken', 'An account with that email already exists');
+      }
+      if (isEmailLimit(status, data)) {
+        return fail(res, 429, 'email_rate_limited', EMAIL_LIMIT_SIGNUP);
       }
       return fail(
         res,

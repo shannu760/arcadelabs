@@ -70,6 +70,11 @@ export const startStub = (port = PORT) =>
       if (path === '/auth/v1/signup' && method === 'POST') {
         const { email, password } = await readBody(req);
         if (!email || !password) return json(res, 422, { msg: 'Email and password are required' });
+        // Test-only: mirrors GoTrue's built-in mailer limit, which the site must
+        // report as an email limit rather than passing the provider string on.
+        if (String(email).startsWith('rate-limited')) {
+          return json(res, 429, { code: 429, error_code: 'over_email_send_rate_limit', msg: 'email rate limit exceeded' });
+        }
         if (users.has(email)) {
           return json(res, 422, { code: 422, error_code: 'user_already_exists', msg: 'User already registered' });
         }
@@ -96,6 +101,9 @@ export const startStub = (port = PORT) =>
         }
 
         const email = String(body.email || '').toLowerCase();
+        if (email.startsWith('rate-limited')) {
+          return json(res, 429, { code: 429, error_code: 'over_email_send_rate_limit', msg: 'email rate limit exceeded' });
+        }
         const user = users.get(email);
         if (!user || user.password !== body.password) {
           return json(res, 400, { error_code: 'invalid_credentials', msg: 'Invalid login credentials' });

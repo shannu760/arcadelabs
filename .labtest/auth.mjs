@@ -181,6 +181,33 @@ try {
   const duplicate = await call('/api/auth/signup', { method: 'POST', body: { email: EMAIL, password: PASSWORD } });
   check('a second sign-up with the same email is refused', duplicate.status === 409 && duplicate.json?.error?.code === 'email_taken', String(duplicate.status));
 
+  /* The provider's mailer limit must arrive as an email limit a player can act
+     on — not as the raw provider string, and not as a generic failure. */
+  const limitedSignup = await call('/api/auth/signup', {
+    method: 'POST',
+    body: { email: 'rate-limited@example.com', password: PASSWORD },
+  });
+  check(
+    'an email-sender limit on sign-up is named as an email limit',
+    limitedSignup.status === 429 &&
+      limitedSignup.json?.error?.code === 'email_rate_limited' &&
+      /hourly limit for sending confirmation emails/.test(limitedSignup.json?.error?.message || '') &&
+      !/rate limit exceeded/i.test(limitedSignup.json?.error?.message || ''),
+    JSON.stringify(limitedSignup.json?.error)
+  );
+
+  const limitedSignin = await call('/api/auth/signin', {
+    method: 'POST',
+    body: { email: 'rate-limited@example.com', password: PASSWORD },
+  });
+  check(
+    'the same limit during sign-in is named as an email limit',
+    limitedSignin.status === 429 &&
+      limitedSignin.json?.error?.code === 'email_rate_limited' &&
+      /hourly limit for sending account emails/.test(limitedSignin.json?.error?.message || ''),
+    JSON.stringify(limitedSignin.json?.error)
+  );
+
   const recover = await call('/api/auth/recover', { method: 'POST', body: { email: 'nobody@example.com' } });
   check('password reset never reveals whether an address exists', recover.status === 200 && recover.json?.ok === true, String(recover.status));
 
