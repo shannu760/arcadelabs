@@ -663,15 +663,22 @@ async function init() {
   state.health = health?.status === 200 ? health.data : null;
   const configMode = config?.data?.mode || null;
   const dbMissing = health?.status === 503 && health?.data?.error?.code === 'db_not_configured';
+  /* Both services can be down at once, and the panel must not promise accounts
+     that are not there. reachable === false means the auth host did not answer. */
+  const authDown = configMode === 'supabase' && config?.data?.reachable === false;
 
   if (!state.health?.ok) {
     // A static host has no /api at all, so this is expected there — it is not a
     // visitor's mistake and not something they can fix by running a command.
     if (dbMissing) {
       lock(
-        'Accounts are connected, but the database that stores players is not, so a new player cannot be saved yet. Nothing is wrong with your browser and no account is affected. The arcade and the landing page still work.',
+        authDown
+          ? 'Accounts are not connected here either, and neither is the database that stores players, so a new player cannot be saved yet. Nothing is wrong with your browser and no account is affected. The arcade and the landing page still work.'
+          : 'Accounts are connected, but the database that stores players is not, so a new player cannot be saved yet. Nothing is wrong with your browser and no account is affected. The arcade and the landing page still work.',
         'The player database is not connected',
-        'Accounts are connected; the player database is not.'
+        authDown
+          ? 'Accounts and the player database are not connected.'
+          : 'Accounts are connected; the player database is not.'
       );
     } else if (isLocalHost()) {
       lock(

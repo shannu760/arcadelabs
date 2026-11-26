@@ -21,3 +21,6 @@ dist/
 
 # logical backups (contain user data)
 .backups/
+
+.vercel
+.env*
