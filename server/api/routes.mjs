@@ -48,6 +48,22 @@ const PLAYER_TABLES = [
   ['arcade_profiles', 'id'],
 ];
 
+/* The reads that must answer without a session — and therefore without the
+   database being a precondition for a truthful 401. */
+function isPublicRead(method, path, url) {
+  if (method !== 'GET') return false;
+  if (
+    ['/api/health', '/api/ranks', '/api/careers', '/api/skills', '/api/challenges'].includes(
+      path
+    )
+  ) {
+    return true;
+  }
+  if (path.startsWith('/api/profiles/')) return true;
+  if (path === '/api/projects' && url.searchParams.get('handle')) return true;
+  return path === '/api/arcade/challenges' || path === '/api/arcade/leaderboard';
+}
+
 const slugify = (value) =>
   String(value)
     .toLowerCase()
@@ -179,6 +195,14 @@ export async function handleApi(req, res, url) {
        the database is missing, so "sign in to continue" stays true instead of
        being masked by a storage error. */
     const session = await authenticate(req);
+
+    /* Refuse an anonymous caller before touching storage, so a deployment with
+       no database still answers "sign in to continue" for a protected route
+       rather than reporting its own storage problem. */
+    if (!session && !isPublicRead(method, path, url)) {
+      return fail(res, 401, 'unauthorized', 'Sign in to continue');
+    }
+
     const db = await getDb();
 
     if (path === '/api/health' && method === 'GET') {
