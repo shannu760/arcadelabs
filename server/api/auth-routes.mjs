@@ -5,15 +5,22 @@
    and then sends that token as `Authorization: Bearer …` — which auth.mjs
    verifies against Supabase on every request.
 
-   Throttling is in memory and therefore per process. That is honest for this
-   single-process foundation build; a multi-instance deployment needs a shared
-   counter (Redis or an edge rate limiter) before launch.
+   Throttling is shared: the counter lives in Postgres (see ratelimit.mjs), so
+   several instances cannot each hand out the full allowance. Without a
+   database it falls back to this process's memory and says so in the log.
+
+   Sign-up can require a Cloudflare Turnstile check. It is off until
+   TURNSTILE_SECRET_KEY and TURNSTILE_SITE_KEY are set, so a deployment without
+   them keeps working; a deployment with them refuses a sign-up that has no
+   valid token.
 */
 
 import { HttpError, readJson, send, fail } from './http.mjs';
 import { authenticate, authMode, supabaseConfigured } from './auth.mjs';
+import { throttle, clientIp } from './ratelimit.mjs';
 import {
   callSupabaseAuth,
+  probeSupabaseAuth,
   shapeSession,
   shapeUser,
   supabaseMessage,
@@ -22,28 +29,33 @@ import {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MIN_PASSWORD = 8;
 
-const buckets = new Map();
+/* ------------------------------------------------------------- turnstile */
 
-function throttle(key, max, windowMs) {
-  const now = Date.now();
-  const bucket = buckets.get(key);
+const turnstileSecret = () => String(process.env.TURNSTILE_SECRET_KEY || '').trim();
+const turnstileSiteKey = () => String(process.env.TURNSTILE_SITE_KEY || '').trim();
 
-  if (!bucket || bucket.resetAt <= now) {
-    buckets.set(key, { count: 1, resetAt: now + windowMs });
-    return;
+async function verifyHuman(token) {
+  if (!turnstileSecret()) return;
+  if (!token) {
+    throw new HttpError(400, 'captcha_required', 'Complete the human check, then try again.');
   }
 
-  bucket.count += 1;
-  if (bucket.count > max) {
-    throw new HttpError(429, 'rate_limited', 'Too many attempts. Try again in a few minutes.');
+  let data = null;
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ secret: turnstileSecret(), response: String(token) }),
+      signal: AbortSignal.timeout(8000),
+    });
+    data = await res.json();
+  } catch {
+    throw new HttpError(502, 'captcha_unreachable', 'The human check could not be verified. Try again.');
   }
-}
 
-/* Keeps the map from growing without bound on a long-running process. */
-function sweep() {
-  if (buckets.size < 500) return;
-  const now = Date.now();
-  for (const [key, bucket] of buckets) if (bucket.resetAt <= now) buckets.delete(key);
+  if (!data?.success) {
+    throw new HttpError(400, 'captcha_failed', 'The human check did not pass. Try again.');
+  }
 }
 
 const credentials = (body) => {
@@ -83,15 +95,24 @@ function signinFailure(status, data) {
 }
 
 export async function handleAuth(req, res, url, method, path) {
-  sweep();
-
-  const ip = req.socket?.remoteAddress || 'unknown';
+  const ip = clientIp(req);
 
   if (path === '/api/auth/config' && method === 'GET') {
+    /* Configured and reachable are different questions. A paused Supabase
+       project keeps its URL set, so the sign-in layer used to offer a form that
+       could only fail. It now gets `reachable: false` and can say so. */
+    const probe = supabaseConfigured()
+      ? await probeSupabaseAuth()
+      : { reachable: false, host: '', detail: 'not_configured' };
+
     return send(res, 200, {
       mode: authMode(),
       provider: supabaseConfigured() ? 'supabase' : 'dev',
       minPasswordLength: MIN_PASSWORD,
+      turnstileSiteKey: turnstileSiteKey() || null,
+      reachable: probe.reachable,
+      authHost: probe.host || null,
+      authDetail: probe.detail,
     });
   }
 
@@ -99,7 +120,8 @@ export async function handleAuth(req, res, url, method, path) {
     requireSupabase();
     const body = await readJson(req);
     const { email, password } = credentials(body);
-    throttle(`signup:${ip}`, 10, 60 * 60 * 1000);
+    await throttle(`signup:${ip}`, 10, 60 * 60 * 1000);
+    await verifyHuman(body.turnstileToken);
 
     const { status, data } = await callSupabaseAuth('/signup', {
       method: 'POST',
@@ -132,7 +154,7 @@ export async function handleAuth(req, res, url, method, path) {
     requireSupabase();
     const body = await readJson(req);
     const { email, password } = credentials(body);
-    throttle(`signin:${ip}:${email}`, 8, 10 * 60 * 1000);
+    await throttle(`signin:${ip}:${email}`, 8, 10 * 60 * 1000);
 
     const { status, data } = await callSupabaseAuth('/token?grant_type=password', {
       method: 'POST',
@@ -179,12 +201,52 @@ export async function handleAuth(req, res, url, method, path) {
     return send(res, 200, { ok: true });
   }
 
+  /* Changing the address on an account. Supabase sends a confirmation to the
+     new address (and, when secure email change is on, to the old one too) and
+     the change only takes effect once that link is followed. */
+  if (path === '/api/auth/email' && method === 'POST') {
+    requireSupabase();
+    const session = await authenticate(req);
+    if (!session) return fail(res, 401, 'unauthorized', 'Sign in to continue');
+
+    await throttle(`email-change:${session.userId}`, 5, 60 * 60 * 1000);
+
+    const body = await readJson(req);
+    const email = String(body.email || '').trim().toLowerCase();
+    if (!EMAIL_RE.test(email) || email.length > 254) {
+      throw new HttpError(400, 'invalid_email', 'Enter a valid email address');
+    }
+
+    const header = String(req.headers.authorization || '');
+    const token = header.startsWith('Bearer ') ? header.slice(7).trim() : '';
+
+    const { status, data } = await callSupabaseAuth('/user', {
+      method: 'PUT',
+      token,
+      body: { email },
+    });
+
+    if (status >= 400) {
+      return fail(
+        res,
+        status === 429 ? 429 : 400,
+        'email_change_failed',
+        supabaseMessage(data) || 'Could not start the email change'
+      );
+    }
+
+    return send(res, 200, {
+      ok: true,
+      message: `Check ${email} for a confirmation link. Your address changes only after you follow it.`,
+    });
+  }
+
   if (path === '/api/auth/recover' && method === 'POST') {
     requireSupabase();
     const body = await readJson(req);
     const email = String(body.email || '').trim().toLowerCase();
     if (!EMAIL_RE.test(email)) throw new HttpError(400, 'invalid_email', 'Enter a valid email address');
-    throttle(`recover:${ip}`, 5, 60 * 60 * 1000);
+    await throttle(`recover:${ip}`, 5, 60 * 60 * 1000);
 
     // Never report whether the address exists.
     await callSupabaseAuth('/recover', { method: 'POST', body: { email } }).catch(() => null);

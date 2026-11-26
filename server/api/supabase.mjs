@@ -25,6 +25,60 @@ export const supabaseBase = () => String(process.env.SUPABASE_URL || '').replace
 export const supabaseKey = () =>
   String(process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || '');
 
+/** The project host only — never the key, never the connection string. */
+export const supabaseHost = () => {
+  try {
+    return new URL(supabaseBase()).host;
+  } catch {
+    return '';
+  }
+};
+
+/* Is the Auth service answering?
+
+   Configured is not the same as reachable: a paused or deleted project keeps
+   SUPABASE_URL set and every password attempt fails with a network error. This
+   probe lets /api/auth/config say so, so the sign-in layer can explain the
+   truth instead of showing a form that cannot work.
+
+   Cached briefly: the config route is hit on every page load, and a page load
+   should not pay for a network round trip twice. */
+const PROBE_TTL_MS = 60 * 1000;
+let probeCache = { at: 0, value: null };
+
+export async function probeSupabaseAuth() {
+  const base = supabaseBase();
+  if (!base) return { reachable: false, host: '', detail: 'not_configured' };
+
+  const now = Date.now();
+  if (probeCache.value && now - probeCache.at < PROBE_TTL_MS) return probeCache.value;
+
+  let value;
+  try {
+    const res = await fetch(`${base}/auth/v1/health`, {
+      headers: supabaseKey() ? { apikey: supabaseKey() } : {},
+      signal: AbortSignal.timeout(4000),
+    });
+    /* Any answer below 500 proves the service is up: a 401 or 404 from the
+       health route is still a live host, and hiding a working sign-in form
+       would be worse than showing one that turns out to be refused. */
+    value = {
+      reachable: res.status < 500,
+      host: supabaseHost(),
+      detail: res.status < 500 ? 'ok' : `http_${res.status}`,
+    };
+  } catch (err) {
+    value = {
+      reachable: false,
+      host: supabaseHost(),
+      detail: err.name === 'TimeoutError' ? 'timeout' : 'network_error',
+    };
+  }
+
+  probeCache = { at: now, value };
+  return value;
+}
+
 /** Calls a Supabase Auth endpoint with the anon key, optionally as a user. */
 export async function callSupabaseAuth(path, { method = 'GET', token, body } = {}) {
   const headers = { apikey: supabaseKey() };

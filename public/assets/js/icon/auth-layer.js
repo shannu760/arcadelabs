@@ -214,6 +214,20 @@ async function probe() {
   const config = res?.ok ? await res.json().catch(() => null) : null;
 
   if (config?.mode === 'supabase') {
+    /* Configured is not the same as working: a paused or deleted Supabase
+       project answers the config route but nothing else, and the old layer
+       offered a form that could only fail. */
+    if (config.reachable === false) {
+      state.mode = 'offline';
+      const host = config.authHost ? ` (${config.authHost})` : '';
+      lock(
+        'Accounts are offline',
+        `The sign-in service${host} is not answering right now, so no password can be checked. Nothing is wrong with your browser and no account is affected. The pages, the skill tree and the arcade still work.`,
+        'Continue to <a href="./onboarding.html">the account page</a>'
+      );
+      return;
+    }
+
     state.mode = 'supabase';
     enableForm();
     el('si-auth-email').focus();
